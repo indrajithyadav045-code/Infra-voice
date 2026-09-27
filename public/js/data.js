@@ -1212,10 +1212,424 @@ const DATA_SOURCES_REGISTRY = [
   }
 ];
 
+// -------------------------------------------------------------
+// Comprehensive Multilingual Registry for BRICS Nations
+// -------------------------------------------------------------
+const BRICS_LANGUAGES = {
+  india: [
+    {
+      code: 'hi',
+      name: 'Hindi',
+      nativeName: 'हिन्दी',
+      locale: 'hi-IN',
+      flag: '🇮🇳',
+      popular: true,
+      placeholder: 'अपनी समस्या का विवरण दें (उदा: पेयजल पाइपलाइन टूटी हुई है, बिजली कटौती, स्कूल तक पक्की सड़क नहीं है)...',
+      micStatus: 'आपकी आवाज़ सुनी जा रही है... साफ़-साफ़ हिन्दी में बोलें। पूरा होने पर दोबारा क्लिक करें।',
+      sampleText: 'नजफगढ़ से मेट्रो तक सुबह कोई बस नहीं चलती, स्कूल और काम के लिए बहुत दिक्कत है।',
+      sampleLoc: 'Najafgarh, West Delhi',
+      category: 'transport'
+    },
+    {
+      code: 'ta',
+      name: 'Tamil',
+      nativeName: 'தமிழ்',
+      locale: 'ta-IN',
+      flag: '🇮🇳',
+      popular: true,
+      placeholder: 'உங்கள் சமூக குறையை விவரிக்கவும் (எ.கா: குடிநீர் குழாய் சேதம், மின்தடை, ஆரம்ப சுகாதார மைய சாலை பழுது)...',
+      micStatus: 'உங்கள் குரல் கேட்கப்படுகிறது... தமிழில் தெளிவாகப் பேசவும். முடிந்ததும் மீண்டும் கிளிக் செய்யவும்.',
+      sampleText: 'எங்கள் கிராமத்தில் கடந்த 3 வாரங்களாக குடிநீர் குழாய் பழுதடைந்துள்ளது. 200 குடும்பங்கள் தண்ணீர் இல்லாமல் தவிக்கிறோம்.',
+      sampleLoc: 'Madurai District, Tamil Nadu',
+      category: 'water'
+    },
+    {
+      code: 'te',
+      name: 'Telugu',
+      nativeName: 'తెలుగు',
+      locale: 'te-IN',
+      flag: '🇮🇳',
+      popular: true,
+      placeholder: 'మీ ప్రాంత సమస్యను వివరించండి (ఉదా: తాగునీటి పైప్‌లైన్ లీకేజ్, వ్యవసాయ విద్యుత్ సమస్య, రహదారి గుంతలు)...',
+      micStatus: 'మీ స్వరం వినబడుతోంది... తెలుగులో స్పష్టంగా మాట్లాడండి. పూర్తయిన తర్వాత మళ్లీ క్లిక్ చేయండి.',
+      sampleText: 'మా గ్రామంలోని వ్యవసాయ విద్యుత్ ట్రాన్స్‌ఫార్మర్ కాలిపోయింది, 3 రోజులుగా నీరు తోడలేకపోతున్నాము.',
+      sampleLoc: 'Warangal Rural, Telangana',
+      category: 'energy'
+    },
+    {
+      code: 'bn',
+      name: 'Bengali',
+      nativeName: 'বাংলা',
+      locale: 'bn-IN',
+      flag: '🇮🇳',
+      popular: true,
+      placeholder: 'আপনার এলাকার সমস্যাটি জানান (যেমন: পানীয় জলের নলকূপ নষ্ট, বিদ্যুৎ বিভ্রাট, কাঁচা বাঁধ ভেঙে যাওয়া)...',
+      micStatus: 'আপনার কথা রেকর্ড হচ্ছে... বাংলায় পরিষ্কারভাবে বলুন। শেষ হলে আবার প্রেস করুন।',
+      sampleText: 'বর্ষার পর সুন্দরবনের মাটির বাঁধ ভেঙে গেছে, লবণাক্ত জল ঢুকে চাষের জমি ও পানীয় জল নষ্ট হচ্ছে।',
+      sampleLoc: 'Sundarbans, West Bengal',
+      category: 'water'
+    },
+    {
+      code: 'mr',
+      name: 'Marathi',
+      nativeName: 'मराठी',
+      locale: 'mr-IN',
+      flag: '🇮🇳',
+      popular: true,
+      placeholder: 'तुमच्या तक्रारीचे वर्णन करा (उदा: शेतासाठी वीज पुरवठा खंडित, रस्ता खराब, पिण्याच्या पाण्याची टंचाई)...',
+      micStatus: 'तुमचा आवाज ऐकला जात आहे... स्पष्ट मराठीत बोला. पूर्ण झाल्यावर पुन्हा क्लिक करा.',
+      sampleText: 'बीड मधील शेतीसाठी दररोज 8 तास वीज पुरवठा खंडित होतो. विहिरीचे पाणी शेतात पोहोचत नाही.',
+      sampleLoc: 'Beed District, Maharashtra',
+      category: 'energy'
+    },
+    {
+      code: 'kn',
+      name: 'Kannada',
+      nativeName: 'ಕನ್ನಡ',
+      locale: 'kn-IN',
+      flag: '🇮🇳',
+      placeholder: 'ನಿಮ್ಮ ಗ್ರಾಮ ಅಥವಾ ಬಡಾವಣೆಯ ಸಮಸ್ಯೆಯನ್ನು ವಿವರಿಸಿ (ಉದಾ: ಕುಡಿಯುವ ನೀರಿನ ಪೈಪ್ ಒಡೆದಿದೆ, ಬಸ್ ಸೌಕರ್ಯ ಕೊರತೆ)...',
+      micStatus: 'ನಿಮ್ಮ ಧ್ವನಿಯನ್ನು ದಾಖಲಿಸಲಾಗುತ್ತಿದೆ... ಕನ್ನಡದಲ್ಲಿ ಸ್ಪಷ್ಟವಾಗಿ ಮಾತನಾಡಿ.',
+      sampleText: 'ಸರ್ಜಾಪುರ ರಸ್ತೆಯಲ್ಲಿ ಮೆಟ್ರೋ ಲಿಂಕ್ ಇಲ್ಲದೆ ಬಸ್ಸುಗಳು ತುಂಬಾ ಕಿಕ್ಕಿರಿದಿವೆ. ಹೆಚ್ಚುವರಿ ಎಲೆಕ್ಟ್ರಿಕ್ ಬಸ್ಸುಗಳು ಬೇಕು.',
+      sampleLoc: 'Bengaluru South, Karnataka',
+      category: 'transport'
+    },
+    {
+      code: 'gu',
+      name: 'Gujarati',
+      nativeName: 'ગુજરાતી',
+      locale: 'gu-IN',
+      flag: '🇮🇳',
+      placeholder: 'તમારી ફરિયાદ જણાવો (દા.ત. પીવાના પાણીની સમસ્યા, રસ્તા પર ખાડા, દવાખાના સુધી એમ્બ્યુલન્સ ન પહોંચવી)...',
+      micStatus: 'તમારો અવાજ રેકોર્ડ થઈ રહ્યો છે... ગુજરાતીમાં સ્પષ્ટ બોલો.',
+      sampleText: 'ગામના પ્રાથમિક આરોગ્ય કેન્દ્ર સુધી પહોંચવાનો રસ્તો ચોમાસામાં ધોવાઈ ગયો છે, તાત્કાલિક રિપેરિંગ જરૂરી છે.',
+      sampleLoc: 'Bhavnagar District, Gujarat',
+      category: 'roads'
+    },
+    {
+      code: 'en',
+      name: 'English',
+      nativeName: 'English (India)',
+      locale: 'en-IN',
+      flag: '🇮🇳',
+      placeholder: 'Describe your community grievance (e.g. broken water pipeline, bridge collapse, unlit highway)...',
+      micStatus: 'Listening to your voice... Speak clearly in English. Click again to finish.',
+      sampleText: 'The culvert connecting Supaul to the primary health centre collapsed last monsoon. Ambulances refuse to come.',
+      sampleLoc: 'Supaul, Bihar',
+      category: 'roads'
+    }
+  ],
+  brazil: [
+    {
+      code: 'pt',
+      name: 'Português',
+      nativeName: 'Português (Brasil)',
+      locale: 'pt-BR',
+      flag: '🇧🇷',
+      popular: true,
+      placeholder: 'Descreva a demanda de infraestrutura (ex: esgoto a céu aberto, posto de saúde sem energia, ponte quebrada)...',
+      micStatus: 'Ouvindo sua voz... Fale claramente em português. Clique novamente para encerrar.',
+      sampleText: 'O esgoto a céu aberto na Rua das Palmeiras transborda toda vez que chove. As crianças estão ficando doentes.',
+      sampleLoc: 'Cidade Tiradentes, São Paulo',
+      category: 'water'
+    },
+    {
+      code: 'gn',
+      name: 'Guaraní',
+      nativeName: 'Avañeʼẽ (Guaraní)',
+      locale: 'gn-BR',
+      flag: '🇧🇷',
+      popular: true,
+      placeholder: 'Ehechauka nde mbaʼe jerure (táva y rehegua, tape ivaíva, tasyo mombyry)...',
+      micStatus: 'Oñehendu hína nde ñeʼẽ... Eñeʼẽ porã Guaraníme. Emboty jey oparire.',
+      sampleText: 'Ore tekohápe ndorekoi y potĩ rohoyʼu hag̃ua, pe ykua oñembyai ha mitãnguéra hasy.',
+      sampleLoc: 'Dourados, Mato Grosso do Sul',
+      category: 'water'
+    },
+    {
+      code: 'tca',
+      name: 'Tikuna',
+      nativeName: 'Magüta (Tikuna)',
+      locale: 'pt-BR',
+      flag: '🇧🇷',
+      placeholder: 'Descreva a necessidade da comunidade amazônica (energia solar, posto de saúde ou barco escolar)...',
+      micStatus: 'Gravando áudio comunitário Tikuna / Português...',
+      sampleText: 'O gerador solar da aldeia no Alto Solimões parou de funcionar e o posto de saúde perdeu o estoque de vacinas.',
+      sampleLoc: 'Tabatinga, Alto Solimões, Amazonas',
+      category: 'health'
+    },
+    {
+      code: 'en',
+      name: 'English',
+      nativeName: 'English (Brazil)',
+      locale: 'en-US',
+      flag: '🇧🇷',
+      placeholder: 'Describe your community infrastructure grievance in English...',
+      micStatus: 'Listening... Speak clearly in English. Click again to finish.',
+      sampleText: 'Overcrowded commuter ferry across Guanabara Bay needs urgent safety inspection and modernization.',
+      sampleLoc: 'Niterói, Rio de Janeiro',
+      category: 'transport'
+    }
+  ],
+  russia: [
+    {
+      code: 'ru',
+      name: 'Russian',
+      nativeName: 'Русский',
+      locale: 'ru-RU',
+      flag: '🇷🇺',
+      popular: true,
+      placeholder: 'Опишите проблему инфраструктуры (напр., авария теплотрассы, разбитая дорога, нет освещения)...',
+      micStatus: 'Идет запись голоса... Говорите четко по-русски. Нажмите еще раз для завершения.',
+      sampleText: 'В микрорайоне Марха теплотрасса просела из-за оттаивания грунта. Температура в квартирах упала до +12°C.',
+      sampleLoc: 'Якутск, Республика Саха',
+      category: 'energy'
+    },
+    {
+      code: 'tt',
+      name: 'Tatar',
+      nativeName: 'Татар теле',
+      locale: 'tt-RU',
+      flag: '🇷🇺',
+      popular: true,
+      placeholder: 'Инфраструктура проблемасын тасвирлагыз (су торбасы ярылган, юл юк, ут сүнгән)...',
+      micStatus: 'Тавышыгызны тыңлыйбыз... Татарча ачык итеп сөйләгез. Тәмамлау өчен кабат басыгыз.',
+      sampleText: 'Авылыбызда эчәр су торбасы ярылды, 3 көн инде чишмәдән ташыйбыз, тиз арада ремонт кирәк.',
+      sampleLoc: 'Арча районы, Татарстан',
+      category: 'water'
+    },
+    {
+      code: 'sah',
+      name: 'Yakut',
+      nativeName: 'Саха тыла',
+      locale: 'ru-RU',
+      flag: '🇷🇺',
+      popular: true,
+      placeholder: 'Бэйэҕит нэһилиэккит кыһалҕатын суруйуҥ (сылаас суох, суол ситэри оҥоһуллубатах)...',
+      micStatus: 'Куоласкыт сурулла турар... Сахалыы чуолкайдык саҥарыҥ. Бүтэрээри хаттаан баттааҥ.',
+      sampleText: 'Кыһыҥҥы суол үрэх туоруур сиринэн эрдэ алдьанна, бөһүөлэккэ ас-үөл тиэйиитэ быһынна.',
+      sampleLoc: 'Хаҥалас улууһа, Саха Сирэ',
+      category: 'roads'
+    },
+    {
+      code: 'ba',
+      name: 'Bashkir',
+      nativeName: 'Башҡортса',
+      locale: 'ru-RU',
+      flag: '🇷🇺',
+      placeholder: 'Инфраструктура мәсьәләһен яҙығыҙ (һыу үткәргес боҙолған, юлға асфальт кәрәк)...',
+      micStatus: 'Тауышығыҙ яҙҙырыла... Башҡортса асыҡ һөйләгеҙ.',
+      sampleText: 'Мәктәпкә илтеүсе күпер яҙғы ташҡында зыян күрҙе, балалар урау юл менән йөрөргә мәжбүр.',
+      sampleLoc: 'Бөрйән районы, Башҡортостан',
+      category: 'roads'
+    },
+    {
+      code: 'ce',
+      name: 'Chechen',
+      nativeName: 'Нохчийн мотт',
+      locale: 'ru-RU',
+      flag: '🇷🇺',
+      placeholder: 'Инфраструктурин бала бийца (хи дацар, серло ца хилар, некъ телхина хилар)...',
+      micStatus: 'Аз дӀаяздеш ду... Нохчийн маттахь къамел де.',
+      sampleText: 'Ламанца ярташка боьду коьрта некъ латта охьадожарна дика телхина, ремонт оьшу.',
+      sampleLoc: 'Итум-Кхаьлла, Нохчийн Республика',
+      category: 'roads'
+    },
+    {
+      code: 'en',
+      name: 'English',
+      nativeName: 'English (Russia)',
+      locale: 'en-US',
+      flag: '🇷🇺',
+      placeholder: 'Describe the infrastructure deficit in English...',
+      micStatus: 'Listening... Speak clearly in English.',
+      sampleText: 'Permafrost thaw caused structural cracks in Arctic transit hub runways, cargo logistics heavily delayed.',
+      sampleLoc: 'Norilsk, Krasnoyarsk Krai',
+      category: 'transport'
+    }
+  ],
+  china: [
+    {
+      code: 'zh',
+      name: 'Mandarin',
+      nativeName: '普通话 (中文)',
+      locale: 'zh-CN',
+      flag: '🇨🇳',
+      popular: true,
+      placeholder: '请详细描述基础设施问题（如：农村供水故障、公路损毁、农产品缺乏冷库、基站信号差）...',
+      micStatus: '正在录音... 请用普通话清晰讲述。完成后再次点击即可。',
+      sampleText: '凉山农户的水果采摘后没有冷库储存，运到县城坏了一半，急需在乡里建设保鲜冷链物流点。',
+      sampleLoc: '凉山州昭觉县, 四川',
+      category: 'digital'
+    },
+    {
+      code: 'yue',
+      name: 'Cantonese',
+      nativeName: '粤语 (廣東話)',
+      locale: 'zh-HK',
+      flag: '🇨🇳',
+      popular: true,
+      placeholder: '請描述民生基建問題（例如：舊區排污渠管滲漏、跨島渡輪班次唔夠、長者醫療站供電）...',
+      micStatus: '正喺度錄音... 請用粵語清晰講述。講完再點擊一次即可。',
+      sampleText: '舊區唐樓排污渠管年久失修成日倒灌，每逢暴雨成條街都係污水，急需市區微改造更新。',
+      sampleLoc: '深水埗 / 荔湾旧城',
+      category: 'water'
+    },
+    {
+      code: 'bo',
+      name: 'Tibetan',
+      nativeName: 'བོད་སྐད (Tibetan)',
+      locale: 'bo-CN',
+      flag: '🇨🇳',
+      placeholder: 'རྨང་གཞིའི་སྒྲིག་བཀོད་ཀྱི་དཀའ་ངལ་བརྗོད་རོགས (ཆུ་མཁོ་འདོན་དང་གློག་ཤུགས)...',
+      micStatus: 'སྐད་སྒྲ་ཉན་བཞིན་ཡོད... བོད་སྐད་ཀྱིས་གསལ་པོར་གསུངས་རོགས།',
+      sampleText: 'དགུན་ཁར་འབྲོག་ཁུལ་གྱི་ཉི་འོད་ནུས་པའི་གློག་ཁུངས་མི་འདང་བས་སྨན་ཁང་གི་སྨན་བཅོས་འཕྲུལ་ཆས་སྤྱོད་ཐུབ་ཀྱི་མི་འདུག',
+      sampleLoc: 'Nagqu, Tibet',
+      category: 'energy'
+    },
+    {
+      code: 'ug',
+      name: 'Uyghur',
+      nativeName: 'ئۇيغۇرچە (Uyghur)',
+      locale: 'ug-CN',
+      flag: '🇨🇳',
+      placeholder: 'ئۇل ئەسلىھە مەسىلىسىنى تەسۋىرلەڭ (سۇ بىلەن تەمىنلەش، يول، توك)...',
+      micStatus: 'ئاۋازىڭىزنى ئاڭلاۋاتىدۇ... ئۇيغۇرچە ئېنىق سۆزلەڭ.',
+      sampleText: 'يېزىمىزنىڭ مېۋە ساقلاش ئۈچۈن توڭلاتقۇ ئامبىرى كەمچىل بولۇپ، يېڭى ئۈزۈملەر تېزلا بۇزۇلۇپ كېتىۋاتىدۇ.',
+      sampleLoc: 'Turpan, Xinjiang',
+      category: 'digital'
+    },
+    {
+      code: 'wuu',
+      name: 'Shanghainese',
+      nativeName: '吴语 (上海话)',
+      locale: 'zh-CN',
+      flag: '🇨🇳',
+      placeholder: '讲讲社区里向个基础设施问题（例如老小区加装电梯、排水管网翻新）...',
+      micStatus: '正在录音... 请用吴语或普通话讲述。',
+      sampleText: '老旧小区积水严重，暴雨辰光底楼人家进水，希望早点改造地下雨污排水管网。',
+      sampleLoc: '杨浦区老工人新村, 上海',
+      category: 'water'
+    },
+    {
+      code: 'en',
+      name: 'English',
+      nativeName: 'English (China)',
+      locale: 'en-US',
+      flag: '🇨🇳',
+      placeholder: 'Describe municipal or logistics infrastructure demand in English...',
+      micStatus: 'Listening... Speak clearly in English.',
+      sampleText: 'Cross-border rail cargo terminal experiencing customs gate bottleneck, expanding automated scanning lanes needed.',
+      sampleLoc: 'Khorgos Border Terminal',
+      category: 'transport'
+    }
+  ],
+  southafrica: [
+    {
+      code: 'zu',
+      name: 'isiZulu',
+      nativeName: 'isiZulu',
+      locale: 'zu-ZA',
+      flag: '🇿🇦',
+      popular: true,
+      placeholder: 'Chaza inkinga yengqalasizinda emphakathini (isib. amapayipi amanzi aphukile, ugesi ocimayo, imigwaqo engcolile)...',
+      micStatus: 'Silalele izwi lakho... Khuluma ngokucacile ngesiZulu. Chofoza futhi ukuze uqedele.',
+      sampleText: 'Isiteshi sikagesi saseDiepkloof siqhume izolo ebusuku. Asinawo ugesi izinsuku ezintathu, ukudla kuyonakala.',
+      sampleLoc: 'Soweto, Gauteng',
+      category: 'energy'
+    },
+    {
+      code: 'xh',
+      name: 'isiXhosa',
+      nativeName: 'isiXhosa',
+      locale: 'xh-ZA',
+      flag: '🇿🇦',
+      popular: true,
+      placeholder: 'Chaza ingxaki yezibonelelo zoluntu (umzekelo: izibane zendlela ezingasebenziyo, amapolisa, iikliniki)...',
+      micStatus: 'Simamele ilizwi lakho... Thetha ngokucacileyo ngesiXhosa. Cofa kwakhona xa ugqibile.',
+      sampleText: 'Sidinga izibane ezindleleni eziya esitishini sikaloliwe ukuze sikhuseleke ebusuku eKhayelitsha.',
+      sampleLoc: 'Khayelitsha, Cape Town',
+      category: 'transport'
+    },
+    {
+      code: 'af',
+      name: 'Afrikaans',
+      nativeName: 'Afrikaans',
+      locale: 'af-ZA',
+      flag: '🇿🇦',
+      popular: true,
+      placeholder: 'Beskryf die infrastruktuurprobleem (bv. slaggate in hoofpad, waterpype wat bars, straatligte af)...',
+      micStatus: 'Luister tans... Praat asseblief duidelik in Afrikaans. Klik weer om te voltooi.',
+      sampleText: 'Die hoof watertoevoerpyp het weer gebars naby die landboukoöperasie. Die hele gemeenskap sit sonder skoon water.',
+      sampleLoc: 'Bloemfontein, Vrystaat',
+      category: 'water'
+    },
+    {
+      code: 'st',
+      name: 'Sesotho',
+      nativeName: 'Sesotho',
+      locale: 'st-ZA',
+      flag: '🇿🇦',
+      placeholder: 'Hlalosa bothata ba litshebeletso (mohlala: metsi a sa hloekang, motlakase o khaohang, litsela tse senyehileng)...',
+      micStatus: 'Re mametse lentswe la hao... Bua ka Sesotho ka ho hlaka.',
+      sampleText: 'Kliniki ya rona ya motse ha e na motlakase o tsitsitseng bakeng sa meriana ya bohlokwa le mehloli ya oksijene.',
+      sampleLoc: 'Phuthaditjhaba, Free State',
+      category: 'health'
+    },
+    {
+      code: 'tn',
+      name: 'Setswana',
+      nativeName: 'Setswana',
+      locale: 'tn-ZA',
+      flag: '🇿🇦',
+      placeholder: 'Tlhalosa bothata jwa mafaratlhatlha (jaaka: pompo ya metsi e e robegegeng, dipone tsa mebila)...',
+      micStatus: 'Re reeditse lentswe la gago... Bua ka Setswana se se tlhapileng.',
+      sampleText: 'Tsela e e yang sekolong e tletse dikhuti tse dikgolo, dibese tsa baithuti ga di kgone go feta fa pula e na.',
+      sampleLoc: 'Mahikeng, North West',
+      category: 'roads'
+    },
+    {
+      code: 'nso',
+      name: 'Sepedi',
+      nativeName: 'Sepedi (Northern Sotho)',
+      locale: 'nso-ZA',
+      flag: '🇿🇦',
+      placeholder: 'Hlaloša bothata bja mananeokgoparara a setšhaba...',
+      micStatus: 'Re theeleditse lentswe la gago... Bolela ka Sepedi.',
+      sampleText: 'Mohlodi wa meetse a go nwa o kgotlelegile ka baka la go kgaoga ga phaephe ya mantle, batho ba a lwala.',
+      sampleLoc: 'Polokwane, Limpopo',
+      category: 'water'
+    },
+    {
+      code: 'en',
+      name: 'English',
+      nativeName: 'English (South Africa)',
+      locale: 'en-ZA',
+      flag: '🇿🇦',
+      placeholder: 'Describe your community infrastructure grievance in English...',
+      micStatus: 'Listening to your voice... Speak clearly in South African English. Click again to finish.',
+      sampleText: 'Diepkloof substation transformer blew yesterday evening, leaving whole sector without power for 3 days.',
+      sampleLoc: 'Diepkloof, Soweto',
+      category: 'energy'
+    }
+  ]
+};
+
 // Helper functions for state retrieval and data manipulation
 function getCountryData(countryCode) {
   const code = (countryCode || 'india').toLowerCase();
   return BRICS_DATA[code] || BRICS_DATA.india;
+}
+
+function getCountryLanguages(countryCode) {
+  const code = (countryCode || 'india').toLowerCase();
+  return BRICS_LANGUAGES[code] || BRICS_LANGUAGES.india;
+}
+
+function getLanguageByCode(countryCode, langCode) {
+  const langs = getCountryLanguages(countryCode);
+  const found = langs.find(l => l.code === (langCode || '').toLowerCase());
+  return found || langs[0];
 }
 
 function getAllCountries() {
@@ -1227,7 +1641,13 @@ function getAllCountries() {
     nationalPlan: c.nationalPlan,
     totalRequests: c.stats.totalRequests,
     activeHotspots: c.stats.activeHotspots,
-    criticalGaps: c.stats.criticalGaps
+    criticalGaps: c.stats.criticalGaps,
+    languages: (BRICS_LANGUAGES[c.code] || []).map(l => ({
+      code: l.code,
+      name: l.name,
+      nativeName: l.nativeName,
+      locale: l.locale
+    }))
   }));
 }
 
@@ -1263,14 +1683,20 @@ function saveStoredRequest(countryCode, newRequest) {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     BRICS_DATA,
+    BRICS_LANGUAGES,
     DATA_SOURCES_REGISTRY,
     getCountryData,
+    getCountryLanguages,
+    getLanguageByCode,
     getAllCountries
   };
 } else if (typeof window !== 'undefined') {
   window.BRICS_DATA = BRICS_DATA;
+  window.BRICS_LANGUAGES = BRICS_LANGUAGES;
   window.DATA_SOURCES_REGISTRY = DATA_SOURCES_REGISTRY;
   window.getCountryData = getCountryData;
+  window.getCountryLanguages = getCountryLanguages;
+  window.getLanguageByCode = getLanguageByCode;
   window.getAllCountries = getAllCountries;
   window.getStoredRequests = getStoredRequests;
   window.saveStoredRequest = saveStoredRequest;

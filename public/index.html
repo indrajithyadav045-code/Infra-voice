@@ -344,6 +344,87 @@
       font-size: 1.3rem;
     }
 
+    /* Multilingual Dialect Selection Pills */
+    .language-selector-wrap {
+      margin-bottom: 22px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+
+    .lang-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .selected-lang-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      background: rgba(249, 115, 22, 0.15);
+      border: 1px solid rgba(249, 115, 22, 0.38);
+      color: #fb923c;
+      padding: 3px 12px;
+      border-radius: 9999px;
+      font-weight: 700;
+    }
+
+    .lang-pills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .lang-pill-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: #cbd5e1;
+      padding: 8px 14px;
+      border-radius: 9999px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .lang-pill-btn:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.25);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .lang-pill-btn.active {
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.25), rgba(234, 88, 12, 0.18));
+      border-color: #f97316;
+      color: #fff;
+      box-shadow: 0 0 14px rgba(249, 115, 22, 0.3);
+    }
+
+    .lang-pill-native {
+      font-weight: 700;
+      color: #fed7aa;
+    }
+
+    .lang-pill-eng {
+      font-size: 0.72rem;
+      color: #94a3b8;
+    }
+
+    .lang-pill-btn.active .lang-pill-eng {
+      color: #fdba74;
+    }
+
     /* Recording Stage */
     .mic-studio-stage {
       background: rgba(0, 0, 0, 0.35);
@@ -751,7 +832,24 @@
         <input type="hidden" id="citizen-country-select" value="india">
       </div>
 
-      <!-- Microphone Recording Studio -->
+      <!-- Step 2: Native Multilingual Dialect Selection -->
+      <div class="language-selector-wrap">
+        <div class="lang-header-row">
+          <span class="country-selector-label" style="margin-bottom: 0;">2. Select Native Dialect / Language</span>
+          <span id="selected-lang-badge" class="selected-lang-badge">
+            <span id="badge-lang-flag">🇮🇳</span>
+            <span id="badge-lang-text">Hindi (हिन्दी) • hi-IN</span>
+          </span>
+        </div>
+        <div class="lang-pills-grid" id="citizen-lang-pills">
+          <!-- Dynamically populated per country -->
+        </div>
+        <input type="hidden" id="citizen-language-select" value="hi">
+        <input type="hidden" id="citizen-language-name" value="Hindi">
+        <input type="hidden" id="citizen-language-locale" value="hi-IN">
+      </div>
+
+      <!-- Step 3: Microphone Recording Studio -->
       <div class="mic-studio-stage">
         <button id="citizen-mic-btn" class="mic-button-glow" title="Click to Speak">🎙️</button>
         <div id="citizen-record-status" class="mic-status-label">
@@ -760,21 +858,21 @@
         <canvas id="citizen-visualizer-canvas"></canvas>
       </div>
 
-      <!-- Regional Dialect Quick Prompt Chips -->
+      <!-- Step 4: Regional Dialect Quick Prompt Chips -->
       <div class="chips-label">
-        2. Or click a sample regional voice prompt:
+        3. Or click a sample regional voice prompt:
       </div>
       <div id="citizen-quick-prompts" class="quick-chips-grid"></div>
 
-      <!-- Grievance Details -->
+      <!-- Step 5: Grievance Details -->
       <div class="input-field-wrap">
-        <label for="citizen-text-input">3. Grievance Description</label>
+        <label for="citizen-text-input">4. Grievance Description</label>
         <textarea id="citizen-text-input" class="textarea-styled" placeholder="Describe the issue (e.g., broken drinking water pipeline, unlit highway, health center lack of power, unpaved school access road)..."></textarea>
       </div>
 
-      <!-- Location -->
+      <!-- Step 6: Location -->
       <div class="input-field-wrap">
-        <label for="citizen-location-input">4. Community Locality / District</label>
+        <label for="citizen-location-input">5. Community Locality / District</label>
         <input type="text" id="citizen-location-input" class="input-text-styled" placeholder="e.g. Madurai District, Tamil Nadu">
       </div>
 
@@ -1057,7 +1155,9 @@
           const code = btn.dataset.country;
           if (countryHidden) countryHidden.value = code;
           if (typeof citizenState !== 'undefined') citizenState.currentCountry = code;
-          if (typeof updateCitizenQuickPrompts === 'function') {
+          if (typeof setupCountryLanguages === 'function') {
+            setupCountryLanguages(code);
+          } else if (typeof updateCitizenQuickPrompts === 'function') {
             updateCitizenQuickPrompts(code);
           }
         });

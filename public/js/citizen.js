@@ -1,13 +1,17 @@
 /**
  * InfraVoice — Citizen Public Portal Core Engine
- * Powers the public citizen grievance submission, voice recording (Web Audio),
- * speech-to-text simulation / Web Speech API, live AI classification, and ticket tracking.
+ * Powers the public citizen grievance submission, voice recording (Web Audio + Web Speech API),
+ * country-specific multilingual dialect switching, live AI classification, and ticket tracking.
  */
 
 const citizenState = {
   currentCountry: 'india',
+  currentLanguage: 'hi',
+  currentLanguageName: 'Hindi',
+  currentLocale: 'hi-IN',
   isRecording: false,
   mediaRecorder: null,
+  speechRecognition: null,
   audioChunks: [],
   audioContext: null,
   analyser: null,
@@ -19,7 +23,7 @@ let currentCitizenUser = null;
 document.addEventListener('DOMContentLoaded', () => {
   setupCitizenStudio();
   setupTicketTracker();
-  updateCitizenQuickPrompts('india');
+  setupCountryLanguages('india', 'hi');
   initCitizenClerkAuth();
 });
 
@@ -27,13 +31,11 @@ function setupCitizenStudio() {
   const countrySelect = document.getElementById('citizen-country-select');
   const recordBtn = document.getElementById('citizen-mic-btn');
   const submitBtn = document.getElementById('citizen-submit-btn');
-  const textInput = document.getElementById('citizen-text-input');
-  const locationInput = document.getElementById('citizen-location-input');
 
   if (countrySelect) {
     countrySelect.addEventListener('change', (e) => {
       citizenState.currentCountry = e.target.value;
-      updateCitizenQuickPrompts(e.target.value);
+      setupCountryLanguages(e.target.value);
     });
   }
 
@@ -44,6 +46,146 @@ function setupCitizenStudio() {
   if (submitBtn) {
     submitBtn.addEventListener('click', submitCitizenGrievance);
   }
+}
+
+/**
+ * Setup and render country-specific multilingual dialect buttons
+ */
+function setupCountryLanguages(countryCode, preferredLangCode) {
+  const code = (countryCode || 'india').toLowerCase();
+  citizenState.currentCountry = code;
+
+  const container = document.getElementById('citizen-lang-pills');
+  const langs = (typeof window.getCountryLanguages === 'function')
+    ? window.getCountryLanguages(code)
+    : ((window.BRICS_LANGUAGES && window.BRICS_LANGUAGES[code]) || []);
+
+  if (!container || !langs || langs.length === 0) return;
+
+  // Determine active language
+  let activeLang = langs[0];
+  if (preferredLangCode) {
+    const found = langs.find(l => l.code === preferredLangCode);
+    if (found) activeLang = found;
+  } else {
+    const pop = langs.find(l => l.popular);
+    if (pop) activeLang = pop;
+  }
+
+  // Render language buttons
+  container.innerHTML = langs.map(lang => {
+    const isActive = lang.code === activeLang.code;
+    return `
+      <button type="button" 
+        class="lang-pill-btn ${isActive ? 'active' : ''}" 
+        data-country="${code}"
+        data-lang="${lang.code}"
+        onclick="selectCitizenLanguage('${code}', '${lang.code}')">
+        <span class="lang-pill-native">${escapeHtml(lang.nativeName)}</span>
+        <span class="lang-pill-eng">(${escapeHtml(lang.name)})</span>
+      </button>
+    `;
+  }).join('');
+
+  // Activate selected language
+  applyLanguageSelection(activeLang, code);
+}
+
+/**
+ * Switch active dialect / language for the selected country
+ */
+function selectCitizenLanguage(countryCode, langCode) {
+  const code = (countryCode || citizenState.currentCountry).toLowerCase();
+  const langs = (typeof window.getCountryLanguages === 'function')
+    ? window.getCountryLanguages(code)
+    : ((window.BRICS_LANGUAGES && window.BRICS_LANGUAGES[code]) || []);
+
+  const selected = langs.find(l => l.code === langCode) || langs[0];
+  if (!selected) return;
+
+  // Update pill classes
+  const pills = document.querySelectorAll('.lang-pill-btn');
+  pills.forEach(pill => {
+    if (pill.dataset.lang === selected.code) {
+      pill.classList.add('active');
+    } else {
+      pill.classList.remove('active');
+    }
+  });
+
+  applyLanguageSelection(selected, code);
+}
+
+function applyLanguageSelection(lang, countryCode) {
+  citizenState.currentLanguage = lang.code;
+  citizenState.currentLanguageName = lang.name;
+  citizenState.currentLocale = lang.locale;
+
+  // Update hidden inputs
+  const langInput = document.getElementById('citizen-language-select');
+  const nameInput = document.getElementById('citizen-language-name');
+  const localeInput = document.getElementById('citizen-language-locale');
+  if (langInput) langInput.value = lang.code;
+  if (nameInput) nameInput.value = lang.name;
+  if (localeInput) localeInput.value = lang.locale;
+
+  // Update badge in header
+  const badgeFlag = document.getElementById('badge-lang-flag');
+  const badgeText = document.getElementById('badge-lang-text');
+  if (badgeFlag) badgeFlag.textContent = lang.flag || '🌐';
+  if (badgeText) badgeText.textContent = `${lang.nativeName} (${lang.name}) • ${lang.locale}`;
+
+  // Update textarea placeholder
+  const textInput = document.getElementById('citizen-text-input');
+  if (textInput && lang.placeholder) {
+    textInput.placeholder = lang.placeholder;
+  }
+
+  // Update mic record status label
+  const statusLabel = document.getElementById('citizen-record-status');
+  if (statusLabel && !citizenState.isRecording) {
+    statusLabel.textContent = lang.micStatus || `Click microphone to speak in ${lang.nativeName} (${lang.name})...`;
+  }
+
+  // Update quick prompts tailored to this dialect
+  renderDialectPrompts(countryCode, lang);
+}
+
+function renderDialectPrompts(countryCode, activeLang) {
+  const container = document.getElementById('citizen-quick-prompts');
+  if (!container) return;
+
+  const langs = (typeof window.getCountryLanguages === 'function')
+    ? window.getCountryLanguages(countryCode)
+    : ((window.BRICS_LANGUAGES && window.BRICS_LANGUAGES[countryCode]) || []);
+
+  // Show active language first, followed by other regional languages of this country
+  const promptList = [];
+  if (activeLang) {
+    promptList.push({
+      langName: activeLang.nativeName,
+      engName: activeLang.name,
+      text: activeLang.sampleText,
+      loc: activeLang.sampleLoc
+    });
+  }
+
+  langs.forEach(l => {
+    if (l.code !== activeLang.code && promptList.length < 4) {
+      promptList.push({
+        langName: l.nativeName,
+        engName: l.name,
+        text: l.sampleText,
+        loc: l.sampleLoc
+      });
+    }
+  });
+
+  container.innerHTML = promptList.map(item => `
+    <button type="button" class="quick-chip" onclick="applyCitizenPrompt('${escapeQuotes(item.text)}', '${escapeQuotes(item.loc)}')">
+      <span style="color: #f97316; font-weight: 700;">${escapeHtml(item.langName)} (${escapeHtml(item.engName)}):</span> ${escapeHtml(item.loc)}
+    </button>
+  `).join('');
 }
 
 async function toggleCitizenRecording() {
@@ -65,18 +207,47 @@ async function toggleCitizenRecording() {
 
       startCitizenVisualizer();
 
+      // Web Speech API Integration if supported
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        try {
+          const rec = new SpeechRecognition();
+          rec.lang = citizenState.currentLocale || 'en-US';
+          rec.continuous = false;
+          rec.interimResults = true;
+          rec.onresult = (event) => {
+            let transcript = '';
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+              transcript += event.results[i][0].transcript;
+            }
+            if (transcript.trim()) {
+              const textInput = document.getElementById('citizen-text-input');
+              if (textInput) textInput.value = transcript;
+            }
+          };
+          rec.onerror = (e) => console.log('Speech recognition note:', e.error);
+          rec.start();
+          citizenState.speechRecognition = rec;
+        } catch (e) {
+          console.log('Web Speech init info:', e);
+        }
+      }
+
       citizenState.mediaRecorder.ondataavailable = e => citizenState.audioChunks.push(e.data);
       citizenState.mediaRecorder.onstop = () => {
         stream.getTracks().forEach(track => track.stop());
         cancelAnimationFrame(citizenState.animId);
         clearCitizenVisualizer();
+        if (citizenState.speechRecognition) {
+          try { citizenState.speechRecognition.stop(); } catch (e) {}
+        }
         transcribeRecordedAudio();
       };
 
       citizenState.mediaRecorder.start();
       citizenState.isRecording = true;
       btn.classList.add('recording');
-      statusLabel.textContent = 'Listening to your voice... Speak clearly in your language. Click again to finish.';
+      statusLabel.textContent = `🎙️ Listening in ${citizenState.currentLanguageName} (${citizenState.currentLocale})... Speak clearly. Click again to finish.`;
     } catch (err) {
       console.warn('Microphone access denied or simulated mode', err);
       simulateMicIntake();
@@ -87,7 +258,7 @@ async function toggleCitizenRecording() {
     }
     citizenState.isRecording = false;
     btn.classList.remove('recording');
-    statusLabel.textContent = 'Voice captured! Transcribing with multilingual AI...';
+    statusLabel.textContent = 'Voice captured! Transcribing with sovereign multilingual AI...';
   }
 }
 
@@ -96,7 +267,7 @@ function simulateMicIntake() {
   const statusLabel = document.getElementById('citizen-record-status');
   citizenState.isRecording = true;
   btn.classList.add('recording');
-  statusLabel.textContent = 'Recording citizen audio stream (4 seconds)...';
+  statusLabel.textContent = `Recording audio stream in ${citizenState.currentLanguageName} (4 seconds)...`;
 
   let count = 4;
   const iv = setInterval(() => {
@@ -105,7 +276,7 @@ function simulateMicIntake() {
       clearInterval(iv);
       citizenState.isRecording = false;
       btn.classList.remove('recording');
-      statusLabel.textContent = 'Audio recorded. Transcribing with speech AI...';
+      statusLabel.textContent = `Audio captured in ${citizenState.currentLanguageName}. Processing speech model...`;
       transcribeRecordedAudio();
     }
   }, 1000);
@@ -146,58 +317,30 @@ function clearCitizenVisualizer() {
 
 function transcribeRecordedAudio() {
   const textInput = document.getElementById('citizen-text-input');
-  const prompts = {
-    india: 'எங்கள் கிராமத்தில் கடந்த 3 வாரங்களாக குடிநீர் குழாய் பழுதடைந்துள்ளது. 200 குடும்பங்கள் தண்ணீர் இல்லாமல் தவிக்கிறோம்.',
-    brazil: 'O esgoto a céu aberto na Rua das Palmeiras transborda toda vez que chove. As crianças estão ficando doentes.',
-    russia: 'В микрорайоне Марха теплотрасса просела из-за оттаивания грунта. Температура в квартирах упала до +12°C.',
-    china: '凉山农户的水果采摘后没有冷库储存，运到县城坏了一半，急需在乡里建设保鲜冷链物流点。',
-    southafrica: 'Isiteshi samandla saseDiepkloof siqhume izolo ebusuku. Asinawo ugesi futhi ukudla kwethu kuyonakala.'
-  };
+  const locInput = document.getElementById('citizen-location-input');
 
-  const sample = prompts[citizenState.currentCountry] || prompts.india;
-  if (textInput) {
-    textInput.value = sample;
+  // If textInput is already populated by Web Speech API, keep it
+  if (textInput && !textInput.value.trim()) {
+    const lang = (typeof window.getLanguageByCode === 'function')
+      ? window.getLanguageByCode(citizenState.currentCountry, citizenState.currentLanguage)
+      : null;
+
+    if (lang && lang.sampleText) {
+      textInput.value = lang.sampleText;
+      if (locInput && !locInput.value.trim() && lang.sampleLoc) {
+        locInput.value = lang.sampleLoc;
+      }
+    }
   }
+
   const statusLabel = document.getElementById('citizen-record-status');
   if (statusLabel) {
-    statusLabel.textContent = 'Voice transcribed successfully! Review or edit below, then click Submit.';
+    statusLabel.textContent = `Transcribed successfully in ${citizenState.currentLanguageName}! Review or edit below, then click Submit.`;
   }
 }
 
 function updateCitizenQuickPrompts(countryCode) {
-  const container = document.getElementById('citizen-quick-prompts');
-  if (!container) return;
-
-  const prompts = {
-    india: [
-      { lang: 'Tamil', text: 'எங்கள் கிராமத்தில் குடிநீர் குழாய் உடைந்து விட்டது. உடனடியாக சரி செய்ய வேண்டும்.', loc: 'Madurai, Tamil Nadu' },
-      { lang: 'Hindi', text: 'नजफगढ़ से मेट्रो तक सुबह कोई बस नहीं चलती, स्कूल और काम के लिए बहुत दिक्कत है।', loc: 'Najafgarh, West Delhi' },
-      { lang: 'Marathi', text: 'शेतासाठी 8 तास वीज पुरवठा बंद असतो, रोहित्र त्वरित दुरुस्त करा.', loc: 'Beed, Maharashtra' }
-    ],
-    brazil: [
-      { lang: 'Português', text: 'O esgoto a céu aberto está escorrendo pelas vielas da comunidade e causando doenças.', loc: 'Zona Leste, São Paulo' },
-      { lang: 'Português', text: 'Trem de passageiros quebrou e precisamos de ônibus de integração na estação.', loc: 'Nova Iguaçu, Rio de Janeiro' }
-    ],
-    russia: [
-      { lang: 'Русский', text: 'Теплотрасса просела от таяния мерзлоты, радиаторы остыли, дети мерзнут.', loc: 'Якутск, Саха' },
-      { lang: 'Русский', text: 'Черное небо над городом, угольные котельные задыхают жилые кварталы.', loc: 'Красноярск' }
-    ],
-    china: [
-      { lang: '中文', text: '山里采摘的茶叶没有保鲜冷库，急需建立冷链集散中心。', loc: '凉山州, 四川' },
-      { lang: '中文', text: '乡卫生院远程医疗网络很卡，无法传输高分辨率心电图。', loc: '毕节, 贵州' }
-    ],
-    southafrica: [
-      { lang: 'isiZulu', text: 'Isiteshi sikagesi siqhume, asinawo ugesi izinsuku ezintathu.', loc: 'Soweto, Gauteng' },
-      { lang: 'isiXhosa', text: 'Sidinga izibane ezindleleni eziya esitishini sikaloliwe ukuze sikhuseleke.', loc: 'Khayelitsha, Cape Town' }
-    ]
-  };
-
-  const list = prompts[countryCode] || prompts.india;
-  container.innerHTML = list.map(item => `
-    <button type="button" class="quick-chip" onclick="applyCitizenPrompt('${escapeQuotes(item.text)}', '${escapeQuotes(item.loc)}')">
-      <span style="color: #f97316; font-weight: 700;">${item.lang}:</span> ${escapeHtml(item.loc)}
-    </button>
-  `).join('');
+  setupCountryLanguages(countryCode);
 }
 
 function applyCitizenPrompt(text, loc) {
@@ -231,7 +374,10 @@ async function submitCitizenGrievance() {
       country: country,
       text: text,
       location: location || `${country.toUpperCase()} Municipality`,
-      channel: 'Public Citizen Portal'
+      channel: 'Public Citizen Portal',
+      language: citizenState.currentLanguage || 'auto',
+      languageName: citizenState.currentLanguageName || 'Auto Detected',
+      locale: citizenState.currentLocale || 'en'
     };
 
     let responseData = null;
@@ -258,8 +404,8 @@ async function submitCitizenGrievance() {
           timestamp: 'Just now',
           rawText: text,
           translatedText: text,
-          language: 'auto',
-          languageName: 'Auto Detected',
+          language: citizenState.currentLanguage || 'auto',
+          languageName: citizenState.currentLanguageName || 'Auto Detected',
           location: location || `${country} Region`,
           category: 'water',
           severity: 'high',
@@ -283,8 +429,8 @@ async function submitCitizenGrievance() {
             <div style="display: flex; align-items: center; gap: 10px;">
               <span style="font-size: 1.6rem;">✅</span>
               <div>
-                <h3 style="font-size: 1.15rem; color: #fff; margin: 0;">Grievance Recorded & Submitted</h3>
-                <span style="font-size: 0.8rem; color: #94a3b8;">Clustered into National Infrastructure Demand Pipeline</span>
+                <h3 style="font-size: 1.15rem; color: #fff; margin: 0;">Grievance Ingested & Clustered</h3>
+                <span style="font-size: 0.8rem; color: #94a3b8;">Multilingual AI Verification • National Infrastructure Demand Matrix</span>
               </div>
             </div>
             <div style="background: #0f172a; border: 1px solid rgba(249, 115, 22, 0.4); padding: 6px 14px; border-radius: 8px; text-align: right;">
@@ -293,15 +439,38 @@ async function submitCitizenGrievance() {
             </div>
           </div>
 
-          <div style="background: rgba(15, 23, 42, 0.8); border-radius: 8px; padding: 14px; margin: 14px 0; font-size: 0.85rem; line-height: 1.6;">
-            <div>📍 <strong>Location:</strong> ${escapeHtml(req.location)}</div>
-            <div>🏷️ <strong>Classified Sector:</strong> <span style="text-transform: uppercase; color: #2dd4bf; font-weight: 700;">${req.category}</span></div>
-            <div>⚡ <strong>Severity Assessment:</strong> <span style="color: #fb923c; font-weight: 700;">${req.severity.toUpperCase()}</span></div>
-            <div>👥 <strong>Estimated Community Impact:</strong> ~${(req.affectedPop || 0).toLocaleString()} citizens</div>
+          <div style="background: rgba(15, 23, 42, 0.8); border-radius: 8px; padding: 16px; margin: 14px 0; font-size: 0.85rem; line-height: 1.6;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+              <div>📍 <strong>Location:</strong> ${escapeHtml(req.location)}</div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 0.76rem; background: rgba(249,115,22,0.15); border: 1px solid rgba(249,115,22,0.4); color: #fb923c; padding: 2px 10px; border-radius: 9999px; font-weight: 700;">
+                  🗣️ ${escapeHtml(req.languageName || citizenState.currentLanguageName)} (${escapeHtml(req.language || citizenState.currentLanguage)})
+                </span>
+                <span style="font-size: 0.76rem; background: rgba(13,148,136,0.15); border: 1px solid rgba(13,148,136,0.4); color: #2dd4bf; padding: 2px 10px; border-radius: 9999px; font-weight: 700;">
+                  ${escapeHtml(req.category ? req.category.toUpperCase() : 'WATER')}
+                </span>
+              </div>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.3); border-left: 3px solid #f97316; padding: 8px 12px; margin-bottom: 10px; border-radius: 4px;">
+              <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Native Dialect Input:</div>
+              <div style="color: #f8fafc; font-style: italic;">"${escapeHtml(req.rawText || text)}"</div>
+            </div>
+
+            ${req.translatedText && req.translatedText !== req.rawText ? `
+            <div style="background: rgba(0,0,0,0.3); border-left: 3px solid #2dd4bf; padding: 8px 12px; margin-bottom: 10px; border-radius: 4px;">
+              <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Standardized Policy Translation (English):</div>
+              <div style="color: #5eead4;">"${escapeHtml(req.translatedText)}"</div>
+            </div>` : ''}
+
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #cbd5e1; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; margin-top: 8px;">
+              <span>⚡ <strong>Urgency:</strong> <span style="color: #fb923c; font-weight: 700;">${(req.severity || 'high').toUpperCase()}</span></span>
+              <span>👥 <strong>Estimated Community Need:</strong> ~${(req.affectedPop || 4500).toLocaleString()} citizens</span>
+            </div>
           </div>
 
           <p style="font-size: 0.82rem; color: #cbd5e1; margin: 0;">
-            💡 <strong>What happens next:</strong> Your request has been clustered with similar community voices in your district. National planners will prioritize capital allocation in the upcoming infrastructure tranche. Save your ticket ID to track progress below.
+            💡 <strong>National Planning Status:</strong> Your request has been translated, verified by the sovereign AI model, and clustered into regional infrastructure demand datasets. You can query its status anytime using Ticket <strong>${ticketId}</strong> below.
           </p>
         </div>
       `;

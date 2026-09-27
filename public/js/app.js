@@ -77,6 +77,7 @@ function loadCountryView(countryCode) {
   renderCharts(data);
   renderMap(data);
   renderCitizenRequests(data);
+  updateLanguageFilterDropdown(countryCode);
   renderHotspots(data);
   renderGaps(data);
   renderRecommendations(data);
@@ -304,7 +305,7 @@ function renderCitizenRequests(data) {
 
   container.innerHTML = allRequests.map(req => {
     return `
-      <div class="request-card">
+      <div class="request-card" data-lang="${escapeHtml((req.language || '').toLowerCase())}">
         <div class="request-header">
           <div class="request-meta-left">
             <span class="request-id">${req.id}</span>
@@ -937,6 +938,7 @@ function switchTab(tabName) {
 function setupFilterBars() {
   const reqSearch = document.getElementById('search-requests');
   const reqCategory = document.getElementById('filter-requests-category');
+  const reqLanguage = document.getElementById('filter-requests-language');
 
   if (reqSearch) {
     reqSearch.addEventListener('input', () => filterRequests());
@@ -944,18 +946,38 @@ function setupFilterBars() {
   if (reqCategory) {
     reqCategory.addEventListener('change', () => filterRequests());
   }
+  if (reqLanguage) {
+    reqLanguage.addEventListener('change', () => filterRequests());
+  }
+}
+
+function updateLanguageFilterDropdown(countryCode) {
+  const reqLanguage = document.getElementById('filter-requests-language');
+  if (!reqLanguage) return;
+
+  const langs = (typeof window.getCountryLanguages === 'function')
+    ? window.getCountryLanguages(countryCode)
+    : [];
+
+  reqLanguage.innerHTML = `
+    <option value="all">All Languages & Dialects</option>
+    ${langs.map(l => `<option value="${l.code}">${escapeHtml(l.nativeName)} (${escapeHtml(l.name)})</option>`).join('')}
+  `;
 }
 
 function filterRequests() {
   const term = document.getElementById('search-requests')?.value.toLowerCase() || '';
   const cat = document.getElementById('filter-requests-category')?.value || 'all';
+  const lang = document.getElementById('filter-requests-language')?.value || 'all';
 
   const cards = document.querySelectorAll('.request-card');
   cards.forEach(c => {
     const text = c.textContent.toLowerCase();
+    const cardLang = (c.dataset.lang || '').toLowerCase();
     const matchesTerm = text.includes(term);
     const matchesCat = cat === 'all' || text.includes(cat.toLowerCase());
-    c.style.display = matchesTerm && matchesCat ? 'block' : 'none';
+    const matchesLang = lang === 'all' || cardLang === lang.toLowerCase() || text.includes(lang.toLowerCase());
+    c.style.display = matchesTerm && matchesCat && matchesLang ? 'block' : 'none';
   });
 }
 
