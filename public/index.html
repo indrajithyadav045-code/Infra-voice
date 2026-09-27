@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>InfraVoice — AI-Powered Citizen Infrastructure Intelligence for BRICS Nations</title>
+  
+  <!-- Modern Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <script
+    async
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_test_ZnJlZS1maW5jaC04NTU3LmNsZXJrLmFjY291bnRzLmRldiQ"
+    src="https://free-finch-8557.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js">
+  </script>
+  
+  <style>
+    :root {
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --bg-dark: #070a12;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --bg-card-hover: rgba(22, 33, 58, 0.85);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(249, 115, 22, 0.35);
+      --primary-orange: #f97316;
+      --primary-amber: #f59e0b;
+      --primary-teal: #0d9488;
+      --accent-cyan: #06b6d4;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(249, 115, 22, 0.14), transparent 70%),
+        radial-gradient(ellipse 60% 40% at 90% 40%, rgba(13, 148, 136, 0.12), transparent 70%),
+        radial-gradient(ellipse 60% 40% at 10% 70%, rgba(99, 102, 241, 0.09), transparent 70%);
+      color: #f8fafc;
+      font-family: var(--font-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation */
+    .portal-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(7, 10, 18, 0.82);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 16px 0;
+      transition: all 0.3s ease;
+    }
+
+    .nav-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .portal-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(249, 115, 22, 0.15);
+      border: 1px solid rgba(249, 115, 22, 0.35);
+      color: #fb923c;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-menu a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .nav-menu a:hover {
+      color: #fff;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-policymaker-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #f1f5f9;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-policymaker-nav:hover {
+      background: rgba(249, 115, 22, 0.12);
+      border-color: rgba(249, 115, 22, 0.4);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .btn-intake-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: #fff;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      text-decoration: none;
+      box-shadow: 0 4px 18px rgba(249, 115, 22, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-intake-nav:hover {
+      background: linear-gradient(135deg, #ea580c, #c2410c);
+      transform: translateY(-1px);
+    }
+
+    /* Hero Section */
+    .hero-wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 50px 24px 30px;
+      text-align: center;
+    }
+
+    .brics-ticker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      padding: 6px 18px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin: 0 0 18px;
+    }
+
+    .hero-h1-gradient {
+      background: linear-gradient(135deg, #f97316 10%, #fbbf24 60%, #34d399 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-p {
+      font-size: 1.2rem;
+      color: #94a3b8;
+      max-width: 780px;
+      margin: 0 auto 36px;
+      font-weight: 400;
+    }
+
+    /* Centerpiece: Citizen Intake Studio Card */
+    .citizen-hero-card {
+      max-width: 860px;
+      margin: 0 auto 60px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-glow);
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.65), 0 0 45px rgba(249, 115, 22, 0.12);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .citizen-hero-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #f97316, #fbbf24, #0d9488);
+    }
+
+    .studio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .studio-title-box h3 {
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .studio-title-box p {
+      font-size: 0.88rem;
+      color: #94a3b8;
+    }
+
+    .live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulseDot 2s infinite;
+    }
+
+    @keyframes pulseDot {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Country Tabs Bar */
+    .country-selector-wrap {
+      margin-bottom: 22px;
+    }
+
+    .country-selector-label {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .country-tabs-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .country-tab-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: #cbd5e1;
+      padding: 10px 8px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .country-tab-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .country-tab-btn.active {
+      background: rgba(249, 115, 22, 0.15);
+      border-color: #f97316;
+      color: #fff;
+      box-shadow: 0 0 16px rgba(249, 115, 22, 0.25);
+    }
+
+    .country-tab-flag {
+      font-size: 1.3rem;
+    }
+
+    /* Recording Stage */
+    .mic-studio-stage {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px dashed rgba(249, 115, 22, 0.4);
+      border-radius: 18px;
+      padding: 26px 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .mic-button-glow {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: #fff;
+      border: 3px solid rgba(255, 255, 255, 0.25);
+      font-size: 2.1rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 28px rgba(249, 115, 22, 0.4);
+      transition: all 0.25s ease;
+    }
+
+    .mic-button-glow:hover {
+      transform: scale(1.06);
+      box-shadow: 0 0 36px rgba(249, 115, 22, 0.6);
+    }
+
+    .mic-button-glow.recording {
+      background: #ef4444;
+      animation: recordingPulse 1.4s infinite;
+      box-shadow: 0 0 35px rgba(239, 68, 68, 0.6);
+    }
+
+    @keyframes recordingPulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { transform: scale(1.08); box-shadow: 0 0 0 18px rgba(239, 68, 68, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+
+    .mic-status-label {
+      font-size: 0.92rem;
+      color: #e2e8f0;
+      margin-top: 14px;
+      font-weight: 500;
+    }
+
+    #citizen-visualizer-canvas {
+      width: 100%;
+      height: 42px;
+      margin-top: 12px;
+    }
+
+    /* Dialect Quick Chips */
+    .chips-label {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .quick-chips-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .quick-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: #cbd5e1;
+      font-size: 0.8rem;
+      padding: 7px 14px;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: var(--font-main);
+    }
+
+    .quick-chip:hover {
+      border-color: #f97316;
+      color: #fff;
+      background: rgba(249, 115, 22, 0.12);
+      transform: translateY(-1px);
+    }
+
+    /* Inputs */
+    .input-field-wrap {
+      margin-bottom: 18px;
+    }
+
+    .input-field-wrap label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .textarea-styled {
+      width: 100%;
+      min-height: 100px;
+      background: rgba(8, 14, 26, 0.9);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 14px;
+      color: #f8fafc;
+      font-size: 0.95rem;
+      font-family: var(--font-main);
+      resize: vertical;
+      transition: border-color 0.2s ease;
+    }
+
+    .textarea-styled:focus {
+      outline: none;
+      border-color: #f97316;
+      box-shadow: 0 0 12px rgba(249, 115, 22, 0.25);
+    }
+
+    .input-text-styled {
+      width: 100%;
+      background: rgba(8, 14, 26, 0.9);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: #f8fafc;
+      font-size: 0.92rem;
+      font-family: var(--font-main);
+      transition: border-color 0.2s ease;
+    }
+
+    .input-text-styled:focus {
+      outline: none;
+      border-color: #f97316;
+      box-shadow: 0 0 12px rgba(249, 115, 22, 0.25);
+    }
+
+    .btn-submit-grievance {
+      width: 100%;
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: #fff;
+      border: none;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      font-family: var(--font-display);
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(249, 115, 22, 0.4);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-submit-grievance:hover {
+      background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(249, 115, 22, 0.5);
+    }
+
+    /* Track Status Box */
+    .track-section {
+      max-width: 860px;
+      margin: 0 auto 70px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 32px;
+      backdrop-filter: blur(20px);
+      text-align: center;
+    }
+
+    .track-input-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    /* Live Feed / Community Radar */
+    .section-wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 2.1rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .section-sub {
+      color: #94a3b8;
+      font-size: 1rem;
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto 36px;
+    }
+
+    .stream-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .stream-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 20px;
+      backdrop-filter: blur(16px);
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .stream-card:hover {
+      border-color: rgba(249, 115, 22, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .stream-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .badge-category {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    .cat-water { background: rgba(14, 165, 233, 0.15); color: #38bdf8; border: 1px solid rgba(14, 165, 233, 0.3); }
+    .cat-energy { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .cat-transport { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+    .cat-roads { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .cat-digital { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+    /* Government Policymaker Executive Banner */
+    .executive-gateway-banner {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
+      border: 1px solid rgba(13, 148, 136, 0.4);
+      border-radius: 24px;
+      padding: 44px;
+      margin: 40px auto 70px;
+      max-width: 1240px;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 32px;
+      align-items: center;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), 0 0 35px rgba(13, 148, 136, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .executive-gateway-banner::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, #0d9488, #6366f1);
+    }
+
+    @media (max-width: 860px) {
+      .country-tabs-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .executive-gateway-banner {
+        grid-template-columns: 1fr;
+        padding: 30px;
+      }
+      .nav-menu {
+        display: none;
+      }
+      .hero-h1 {
+        font-size: 2.2rem;
+      }
+      .citizen-hero-card {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Navigation -->
+  <header class="portal-nav">
+    <div class="nav-container">
+      <a href="index.html" class="portal-logo">
+        <div style="font-size: 1.6rem;">🌐</div>
+        <div>Infra<span style="color: var(--primary-orange);">Voice</span></div>
+        <div class="logo-badge">BRICS DPG</div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="#submit-query">🎙️ Voice Grievance</a>
+        <a href="#track-grievance">🔍 Track Status</a>
+        <a href="#live-radar">📊 Community Radar</a>
+        <a href="#brics-nations">5 Economies</a>
+        <a href="#policymaker-gate">🏛️ Policymaker Portal</a>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Clerk Authenticated Citizen Slot -->
+        <div id="citizen-clerk-user-slot" style="display: none; align-items: center; gap: 8px;">
+          <span id="citizen-user-name" style="font-size: 0.82rem; font-weight: 700; color: #fed7aa; background: rgba(255,255,255,0.06); padding: 5px 12px; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.1);"></span>
+          <button id="btn-citizen-signout" class="btn-policymaker-nav" style="padding: 6px 12px; font-size: 0.78rem; cursor: pointer;">Sign Out</button>
+        </div>
+
+        <!-- Clerk Sign In for Citizens -->
+        <button id="btn-citizen-signin" class="btn-policymaker-nav" style="background: rgba(13, 148, 136, 0.15); border-color: rgba(13, 148, 136, 0.4); color: #2dd4bf; cursor: pointer;">
+          👤 Citizen Sign In (Clerk)
+        </button>
+
+        <!-- Policymaker Sign In (admin / admin@123) -->
+        <a href="login.html" class="btn-policymaker-nav" style="border-color: rgba(249, 115, 22, 0.45); color: #fed7aa;" title="Ministry Officials: admin / admin@123">
+          🏛️ Policymaker Portal (admin) →
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Hero -->
+  <section class="hero-wrap">
+    <div class="brics-ticker">
+      <span>🇧🇷 Brazil</span>
+      <span>•</span>
+      <span>🇷🇺 Russia</span>
+      <span>•</span>
+      <span>🇮🇳 India</span>
+      <span>•</span>
+      <span>🇨🇳 China</span>
+      <span>•</span>
+      <span>🇿🇦 South Africa</span>
+    </div>
+
+    <h1 class="hero-h1">
+      Your Voice Shapes <br>
+      <span class="hero-h1-gradient">National Infrastructure</span>
+    </h1>
+
+    <p class="hero-p">
+      A Digital Public Good designed for BRICS nations that collects citizen development requests via voice, text, or messaging in native regional dialects — clustering ground-truth demand directly into national infrastructure budgets.
+    </p>
+
+    <!-- CENTERPIECE: Interactive Citizen Voice & Grievance Intake Studio -->
+    <div id="submit-query" class="citizen-hero-card">
+      <div class="studio-header">
+        <div class="studio-title-box">
+          <h3>🎙️ Citizen Voice Intake Studio</h3>
+          <p>Free, sovereign, and multilingual. Speak or type your community grievance below.</p>
+        </div>
+        <div class="live-indicator">
+          <div class="live-dot"></div>
+          <span>AI Listening Studio Online</span>
+        </div>
+      </div>
+
+      <!-- Country Selection Tabs -->
+      <div class="country-selector-wrap">
+        <span class="country-selector-label">1. Select Your Nation</span>
+        <div class="country-tabs-grid" id="country-tab-buttons">
+          <button type="button" class="country-tab-btn active" data-country="india">
+            <span class="country-tab-flag">🇮🇳</span>
+            <span>India</span>
+          </button>
+          <button type="button" class="country-tab-btn" data-country="brazil">
+            <span class="country-tab-flag">🇧🇷</span>
+            <span>Brazil</span>
+          </button>
+          <button type="button" class="country-tab-btn" data-country="russia">
+            <span class="country-tab-flag">🇷🇺</span>
+            <span>Russia</span>
+          </button>
+          <button type="button" class="country-tab-btn" data-country="china">
+            <span class="country-tab-flag">🇨🇳</span>
+            <span>China</span>
+          </button>
+          <button type="button" class="country-tab-btn" data-country="southafrica">
+            <span class="country-tab-flag">🇿🇦</span>
+            <span>South Africa</span>
+          </button>
+        </div>
+        <input type="hidden" id="citizen-country-select" value="india">
+      </div>
+
+      <!-- Microphone Recording Studio -->
+      <div class="mic-studio-stage">
+        <button id="citizen-mic-btn" class="mic-button-glow" title="Click to Speak">🎙️</button>
+        <div id="citizen-record-status" class="mic-status-label">
+          Click the microphone to record in your dialect (Tamil, Hindi, Portuguese, Russian, Mandarin, Zulu, English...)
+        </div>
+        <canvas id="citizen-visualizer-canvas"></canvas>
+      </div>
+
+      <!-- Regional Dialect Quick Prompt Chips -->
+      <div class="chips-label">
+        2. Or click a sample regional voice prompt:
+      </div>
+      <div id="citizen-quick-prompts" class="quick-chips-grid"></div>
+
+      <!-- Grievance Details -->
+      <div class="input-field-wrap">
+        <label for="citizen-text-input">3. Grievance Description</label>
+        <textarea id="citizen-text-input" class="textarea-styled" placeholder="Describe the issue (e.g., broken drinking water pipeline, unlit highway, health center lack of power, unpaved school access road)..."></textarea>
+      </div>
+
+      <!-- Location -->
+      <div class="input-field-wrap">
+        <label for="citizen-location-input">4. Community Locality / District</label>
+        <input type="text" id="citizen-location-input" class="input-text-styled" placeholder="e.g. Madurai District, Tamil Nadu">
+      </div>
+
+      <!-- Submit Action -->
+      <button id="citizen-submit-btn" class="btn-submit-grievance">
+        <span>🚀 Submit Community Grievance (Instant & Free)</span>
+      </button>
+
+      <!-- Feedback / Ticket Confirmation Card -->
+      <div id="citizen-feedback-result" style="display: none;"></div>
+    </div>
+  </section>
+
+  <!-- Track Grievance Status -->
+  <section id="track-grievance" class="track-section">
+    <div style="font-size: 1.8rem; margin-bottom: 6px;">🔍</div>
+    <h2 style="font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; margin-bottom: 6px;">
+      Track Your Grievance Status
+    </h2>
+    <p style="color: #94a3b8; font-size: 0.92rem; max-width: 580px; margin: 0 auto 18px;">
+      Check how your voice has been aggregated into municipal demand matrices and national infrastructure planning pipelines.
+    </p>
+
+    <div class="track-input-row">
+      <input type="text" id="citizen-track-input" class="input-text-styled" style="flex: 1;" placeholder="Enter Tracking Ticket ID (e.g. REQ-IN-1092 or REQ-IN-9400)">
+      <button id="citizen-track-btn" class="btn-intake-nav" style="padding: 12px 24px; font-size: 0.95rem; border: none; cursor: pointer;">
+        Track Status
+      </button>
+    </div>
+
+    <div id="citizen-track-result" style="margin-top: 18px; display: none;"></div>
+  </section>
+
+  <!-- Live Citizen Radar / Stream -->
+  <section id="live-radar" class="section-wrap">
+    <h2 class="section-title">Live BRICS Citizen Voice Radar</h2>
+    <p class="section-sub">
+      Aggregating real-time community infrastructure requests across all 5 economies.
+    </p>
+
+    <div class="stream-grid">
+      <!-- Card 1 -->
+      <div class="stream-card">
+        <div class="stream-card-top">
+          <span style="font-size: 0.85rem; font-weight: 700; color: #cbd5e1;">🇮🇳 Madurai, Tamil Nadu</span>
+          <span class="badge-category cat-water">Piped Water</span>
+        </div>
+        <p style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 12px;">
+          "Drinking water pipeline cracked 3 weeks ago near primary school, 240 households without safe water."
+        </p>
+        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b; border-top: 1px solid var(--border-subtle); padding-top: 8px;">
+          <span>Lang: <strong>Tamil (ta)</strong></span>
+          <span style="color: #fb923c; font-weight: 700;">URGENT • HIGH</span>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="stream-card">
+        <div class="stream-card-top">
+          <span style="font-size: 0.85rem; font-weight: 700; color: #cbd5e1;">🇧🇷 Zona Leste, São Paulo</span>
+          <span class="badge-category cat-water">Sanitation</span>
+        </div>
+        <p style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 12px;">
+          "Open sewage trench overflowing after seasonal rainfall. Risk of waterborne illness in dense favela."
+        </p>
+        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b; border-top: 1px solid var(--border-subtle); padding-top: 8px;">
+          <span>Lang: <strong>Português (pt)</strong></span>
+          <span style="color: #ef4444; font-weight: 700;">CRITICAL • SEVERE</span>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="stream-card">
+        <div class="stream-card-top">
+          <span style="font-size: 0.85rem; font-weight: 700; color: #cbd5e1;">🇿🇦 Soweto, Gauteng</span>
+          <span class="badge-category cat-energy">Grid Power</span>
+        </div>
+        <p style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 12px;">
+          "Local transformer exploded during load shedding. Clinic medicine refrigerators operating on emergency generator."
+        </p>
+        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b; border-top: 1px solid var(--border-subtle); padding-top: 8px;">
+          <span>Lang: <strong>isiZulu (zu)</strong></span>
+          <span style="color: #ef4444; font-weight: 700;">CRITICAL • PRIORITY 1</span>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="stream-card">
+        <div class="stream-card-top">
+          <span style="font-size: 0.85rem; font-weight: 700; color: #cbd5e1;">🇷🇺 Якутск (Yakutsk)</span>
+          <span class="badge-category cat-energy">Heating</span>
+        </div>
+        <p style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 12px;">
+          "District heating pipe sagged due to permafrost soil degradation; interior temperatures dropped to 12°C."
+        </p>
+        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b; border-top: 1px solid var(--border-subtle); padding-top: 8px;">
+          <span>Lang: <strong>Русский (ru)</strong></span>
+          <span style="color: #fb923c; font-weight: 700;">HIGH • WINTER RESILIENCE</span>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="stream-card">
+        <div class="stream-card-top">
+          <span style="font-size: 0.85rem; font-weight: 700; color: #cbd5e1;">🇨🇳 凉山州 (Liangshan), Sichuan</span>
+          <span class="badge-category cat-transport">Cold Chain</span>
+        </div>
+        <p style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 12px;">
+          "Mountain orchard produce spoiling during transit; urgently need cold-chain aggregation hub in township."
+        </p>
+        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b; border-top: 1px solid var(--border-subtle); padding-top: 8px;">
+          <span>Lang: <strong>中文 (zh)</strong></span>
+          <span style="color: #10b981; font-weight: 700;">RURAL REVITALIZATION</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRICS 5 Economies Overview -->
+  <section id="brics-nations" class="section-wrap" style="border-top: 1px solid var(--border-subtle);">
+    <h2 class="section-title">Multi-Sovereignty Architecture</h2>
+    <p class="section-sub">
+      InfraVoice integrates with distinct national master plans across the 5 BRICS economies.
+    </p>
+
+    <div class="stream-grid">
+      <div class="stream-card" style="border-top: 3px solid #10b981;">
+        <div style="font-size: 1.8rem; margin-bottom: 8px;">🇧🇷</div>
+        <h3 style="font-family: var(--font-display); font-size: 1.2rem; color: #fff; margin-bottom: 4px;">Brazil</h3>
+        <div style="font-size: 0.78rem; color: #10b981; font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">Novo PAC & Amazonia</div>
+        <p style="font-size: 0.85rem; color: #94a3b8;">
+          Aligns favela sanitation deficits and off-grid health clinic solar microgrids with federal PAC tranche spending.
+        </p>
+      </div>
+
+      <div class="stream-card" style="border-top: 3px solid #38bdf8;">
+        <div style="font-size: 1.8rem; margin-bottom: 8px;">🇷🇺</div>
+        <h3 style="font-family: var(--font-display); font-size: 1.2rem; color: #fff; margin-bottom: 4px;">Russia</h3>
+        <div style="font-size: 0.78rem; color: #38bdf8; font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">Trunk Infrastructure Modernization</div>
+        <p style="font-size: 0.85rem; color: #94a3b8;">
+          Tracks Arctic permafrost heating shifts and clean gas conversions across Siberian industrial corridors.
+        </p>
+      </div>
+
+      <div class="stream-card" style="border-top: 3px solid #f97316;">
+        <div style="font-size: 1.8rem; margin-bottom: 8px;">🇮🇳</div>
+        <h3 style="font-family: var(--font-display); font-size: 1.2rem; color: #fff; margin-bottom: 4px;">India</h3>
+        <div style="font-size: 0.78rem; color: #f97316; font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">PM GatiShakti & Jal Jeevan</div>
+        <p style="font-size: 0.85rem; color: #94a3b8;">
+          Multilingual aggregation across Hindi, Tamil, Marathi, and Bengali powering last-mile water and rural feeders.
+        </p>
+      </div>
+
+      <div class="stream-card" style="border-top: 3px solid #ef4444;">
+        <div style="font-size: 1.8rem; margin-bottom: 8px;">🇨🇳</div>
+        <h3 style="font-family: var(--font-display); font-size: 1.2rem; color: #fff; margin-bottom: 4px;">China</h3>
+        <div style="font-size: 0.78rem; color: #ef4444; font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">14th Five-Year & Digital Village</div>
+        <p style="font-size: 0.85rem; color: #94a3b8;">
+          Connects western mountain agricultural logistics and rural telemedicine pipelines directly with county plans.
+        </p>
+      </div>
+
+      <div class="stream-card" style="border-top: 3px solid #fbbf24;">
+        <div style="font-size: 1.8rem; margin-bottom: 8px;">🇿🇦</div>
+        <h3 style="font-family: var(--font-display); font-size: 1.2rem; color: #fff; margin-bottom: 4px;">South Africa</h3>
+        <div style="font-size: 0.78rem; color: #fbbf24; font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">National Development Plan 2030</div>
+        <p style="font-size: 0.85rem; color: #94a3b8;">
+          Combats township grid instability and pedestrian transport deficits across Gauteng and Western Cape.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Executive Policymaker Banner -->
+  <section id="policymaker-gate" class="section-wrap">
+    <div class="executive-gateway-banner">
+      <div>
+        <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(13, 148, 136, 0.2); border: 1px solid rgba(13, 148, 136, 0.4); color: #2dd4bf; font-size: 0.74rem; font-weight: 700; padding: 4px 12px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 14px;">
+          <span>🔒 Restricted Government & Ministerial Gateway</span>
+        </div>
+        <h2 style="font-family: var(--font-display); font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 12px; line-height: 1.2;">
+          National Policymaker Executive Platform
+        </h2>
+        <p style="color: #94a3b8; font-size: 0.98rem; line-height: 1.6; margin-bottom: 24px;">
+          Are you a Ministry Official, Infrastructure Planner, or Evaluator? Access sovereign geospatial demand heatmaps, infrastructure gap matrices, and capital project recommendations secured by Clerk Zero-Trust identity.
+        </p>
+        <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+          <a href="login.html" class="btn-intake-nav" style="padding: 14px 26px; font-size: 0.95rem;">
+            🏛️ Sign In to Policymaker Platform →
+          </a>
+          <a href="login.html" class="btn-policymaker-nav" style="padding: 14px 22px; font-size: 0.95rem;">
+            ⚡ 1-Click Diplomatic Demo Access
+          </a>
+        </div>
+      </div>
+      <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 24px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">
+          🔐 Verified Ministry Features
+        </div>
+        <ul style="list-style: none; font-size: 0.85rem; color: #94a3b8; display: flex; flex-direction: column; gap: 10px;">
+          <li>📍 <strong>Leaflet Geospatial Mapping:</strong> Interactive demand clustering without commercial watermark constraints</li>
+          <li>📊 <strong>Infrastructure Gaps:</strong> Cross-correlated census vulnerability vs public budgets</li>
+          <li>🎯 <strong>AI Policy Dossiers:</strong> Explainable investment proposals mapped to national tranches</li>
+          <li>🛡️ <strong>Clerk Auth:</strong> Role-Based Access Control protecting ministerial insights</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modern Footer -->
+  <footer style="background: #04070d; border-top: 1px solid var(--border-subtle); padding: 48px 24px 30px; text-align: center;">
+    <div style="max-width: 1240px; margin: 0 auto;">
+      <div class="portal-logo" style="justify-content: center; margin-bottom: 12px;">
+        <div style="font-size: 1.5rem;">🌐</div>
+        <div>Infra<span style="color: var(--primary-orange);">Voice</span></div>
+      </div>
+      <p style="color: #64748b; font-size: 0.88rem; max-width: 600px; margin: 0 auto 20px;">
+        Digital Public Good for the BRICS Innovation Challenge • Open-Source Multilingual Infrastructure Intelligence
+      </p>
+
+      <div style="display: flex; justify-content: center; gap: 24px; font-size: 0.85rem; margin-bottom: 20px; flex-wrap: wrap;">
+        <a href="#submit-query" style="color: #94a3b8; text-decoration: none;">🎙️ Voice Grievance</a>
+        <a href="#track-grievance" style="color: #94a3b8; text-decoration: none;">🔍 Track Ticket</a>
+        <a href="login.html" style="color: var(--primary-orange); text-decoration: none; font-weight: 600;">🏛️ Policymaker Portal (Login)</a>
+      </div>
+
+      <div style="font-size: 0.74rem; color: #475569;">
+        Protected by Clerk Identity Management & Enterprise Encryption • OpenStreetMap Data Engine
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal: Citizen Clerk Sign-In Modal -->
+  <div id="modal-citizen-clerk" class="modal-backdrop">
+    <div class="modal-dialog" style="max-width: 480px; text-align: center; background: rgba(15, 23, 42, 0.96); border: 1px solid rgba(13, 148, 136, 0.45); border-radius: 20px; box-shadow: 0 24px 70px rgba(0,0,0,0.75);">
+      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <h3 style="font-size: 1.2rem; color: #fff; margin: 0; font-family: var(--font-display);">👤 Public Citizen Verification (Clerk)</h3>
+        <button class="btn-icon" id="btn-close-citizen-clerk" style="background: none; border: none; color: #94a3b8; font-size: 1.4rem; cursor: pointer; padding: 4px;">✕</button>
+      </div>
+      <div class="modal-body" style="padding: 24px;">
+        <div style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 18px; line-height: 1.5;">
+          Sign in via Clerk to link your voice grievances to your personal account, receive automated municipal updates, and track resolution timelines.
+        </div>
+
+        <!-- Clerk Native Sign-In Mount Slot -->
+        <div id="citizen-clerk-mount-target" style="min-height: 160px; display: flex; align-items: center; justify-content: center;">
+          <div style="font-size: 0.85rem; color: #cbd5e1;">Loading Clerk Citizen Security...</div>
+        </div>
+
+        <div style="margin: 20px 0; display: flex; align-items: center; gap: 10px;">
+          <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.1);"></div>
+          <span style="font-size: 0.72rem; color: #64748b; text-transform: uppercase; font-weight: 700;">OR INSTANT CITIZEN SESSION</span>
+          <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.1);"></div>
+        </div>
+
+        <!-- 1-Click Fast Citizen Verification for Evaluators & Local Testing -->
+        <button id="btn-citizen-demo-login" class="btn-submit-grievance" style="padding: 12px; font-size: 0.95rem; background: linear-gradient(135deg, #0d9488, #059669); box-shadow: 0 4px 16px rgba(13, 148, 136, 0.35);">
+          <span>👤 1-Click Citizen Verification (Priya Sharma • Madurai)</span>
+        </button>
+        <p style="font-size: 0.74rem; color: #64748b; margin-top: 8px;">
+          Instantly authenticates as a verified citizen to test grievance stamping and personal ticket tracking.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/citizen.js"></script>
+  <script>
+    // Country tab switching on the hero card
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabButtons = document.querySelectorAll('.country-tab-btn');
+      const countryHidden = document.getElementById('citizen-country-select');
+
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const code = btn.dataset.country;
+          if (countryHidden) countryHidden.value = code;
+          if (typeof citizenState !== 'undefined') citizenState.currentCountry = code;
+          if (typeof updateCitizenQuickPrompts === 'function') {
+            updateCitizenQuickPrompts(code);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

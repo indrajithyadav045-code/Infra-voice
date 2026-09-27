@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InfraVoice — BRICS Citizen Infrastructure Intelligence Platform</title>
+  
+  <!-- Modern Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS for Geospatial Maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <!-- Custom Design System -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- Chart.js & Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Clerk Authentication SDK -->
+  <script
+    async
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_test_ZnJlZS1maW5jaC04NTU3LmNsZXJrLmFjY291bnRzLmRldiQ"
+    src="https://free-finch-8557.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js">
+  </script>
+</head>
+<body>
+
+<div class="app-container">
+  
+  <!-- ========================================== -->
+  <!-- SIDEBAR NAVIGATION                         -->
+  <!-- ========================================== -->
+  <aside class="app-sidebar" id="app-sidebar">
+    <div class="sidebar-header">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">🌐</div>
+        <div>Infra<span>Voice</span></div>
+      </a>
+      <span class="demo-badge">Demo</span>
+    </div>
+
+    <!-- Country Selector -->
+    <div class="sidebar-country-selector">
+      <label class="sidebar-country-label" for="country-select">BRICS Member Nation</label>
+      <select id="country-select" class="country-select-dropdown">
+        <option value="india">🇮🇳 India</option>
+        <option value="brazil">🇧🇷 Brazil</option>
+        <option value="russia">🇷🇺 Russia</option>
+        <option value="china">🇨🇳 China</option>
+        <option value="southafrica">🇿🇦 South Africa</option>
+      </select>
+    </div>
+
+    <!-- Navigation Items -->
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Development Intelligence</div>
+      
+      <div class="nav-item active" data-tab="overview">
+        <span class="nav-item-icon">📊</span>
+        <span>Overview</span>
+      </div>
+
+      <div class="nav-item" data-tab="requests">
+        <span class="nav-item-icon">🗣️</span>
+        <span>Citizen Requests</span>
+        <span class="nav-badge">Live</span>
+      </div>
+
+      <div class="nav-item" data-tab="hotspots">
+        <span class="nav-item-icon">📍</span>
+        <span>Demand Hotspots</span>
+      </div>
+
+      <div class="nav-item" data-tab="gaps">
+        <span class="nav-item-icon">⚡</span>
+        <span>Infrastructure Gaps</span>
+      </div>
+
+      <div class="nav-item" data-tab="recommendations">
+        <span class="nav-item-icon">🎯</span>
+        <span>Policy Dossier</span>
+      </div>
+
+      <div class="nav-section-title">Operations & Impact</div>
+
+      <div class="nav-item" data-tab="impact">
+        <span class="nav-item-icon">📈</span>
+        <span>DPI Impact Tracker</span>
+      </div>
+
+      <div class="nav-item" data-tab="datasources">
+        <span class="nav-item-icon">🗄️</span>
+        <span>Data Governance</span>
+      </div>
+
+      <div class="nav-section-title">Citizen Intake</div>
+
+      <div class="nav-item" data-tab="intake">
+        <span class="nav-item-icon">🎙️</span>
+        <span>Voice & Text Studio</span>
+      </div>
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+      <div class="dpg-indicator">
+        <span class="dpg-icon">🛡️</span>
+        <span>Digital Public Good (DPG)</span>
+      </div>
+      <a href="index.html" class="btn btn-secondary btn-sm" style="width: 100%;">
+        🗣️ ← Citizen Voice Intake
+      </a>
+    </div>
+  </aside>
+
+  <!-- ========================================== -->
+  <!-- MAIN APP CONTAINER                         -->
+  <!-- ========================================== -->
+  <main class="app-main">
+    
+    <!-- Top Bar -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="active-country-banner">
+          <span class="active-country-flag" id="header-country-flag">🇮🇳</span>
+          <span id="header-country-name" style="font-weight: 700;">India</span>
+          <span style="color: var(--text-muted); font-size: 0.8rem;">•</span>
+          <span id="header-national-plan" style="color: var(--teal); font-size: 0.82rem;">PM GatiShakti & Jal Jeevan Mission</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Clerk Authenticated User Badge & Sign Out -->
+        <div id="clerk-user-slot" class="clerk-user-slot" style="display: none;">
+          <div class="clerk-user-avatar" id="user-avatar-initials">GOV</div>
+          <div style="display: flex; flex-direction: column; text-align: left; line-height: 1.15;">
+            <span id="user-display-name" style="font-weight: 700; font-size: 0.8rem;">Ministry Planner</span>
+            <span id="user-display-email" style="font-size: 0.7rem; color: var(--text-muted);">policymaker.brics@infravoice.gov</span>
+          </div>
+          <span class="clerk-user-role-badge">🏛️ Policymaker</span>
+          <button id="btn-clerk-signout" class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-size: 0.72rem; margin-left: 4px;">Sign Out</button>
+        </div>
+
+        <button id="btn-theme-toggle" class="btn-icon" title="Toggle Theme">☀️</button>
+        <button id="btn-open-settings" class="btn btn-secondary btn-sm">🛡️ Platform Architecture</button>
+        <button class="btn btn-primary btn-sm" onclick="switchTab('intake')">🎙️ Ingest Voice Request</button>
+      </div>
+    </header>
+
+    <!-- Dynamic View Containers -->
+    <div class="view-container">
+
+      <!-- ======================================== -->
+      <!-- TAB 1: OVERVIEW DASHBOARD                -->
+      <!-- ======================================== -->
+      <section class="view-section active" id="view-overview">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <h2>National Infrastructure Intelligence</h2>
+            <p>Aggregating multilingual citizen voices, geospatial clustering, and aligning capital spending with verified ground truth.</p>
+          </div>
+          <span class="demo-badge">Synthetic Demo Dataset</span>
+        </div>
+
+        <!-- KPI Cards Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Citizen Requests Ingested</span>
+              <span class="stat-icon">🗣️</span>
+            </div>
+            <div class="stat-value" id="kpi-total-requests">2,847</div>
+            <div class="stat-meta">Across 6 linguistic channels <span class="demo-badge">Demo</span></div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Active Demand Hotspots</span>
+              <span class="stat-icon">📍</span>
+            </div>
+            <div class="stat-value" id="kpi-active-hotspots" style="color: var(--brics-orange);">18</div>
+            <div class="stat-meta">Geospatial clusters detected <span class="demo-badge">Demo</span></div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Critical Infrastructure Gaps</span>
+              <span class="stat-icon">⚡</span>
+            </div>
+            <div class="stat-value" id="kpi-critical-gaps" style="color: var(--rose);">12</div>
+            <div class="stat-meta">Severe benchmark deficits <span class="demo-badge">Demo</span></div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Active DPI Projects</span>
+              <span class="stat-icon">🏗️</span>
+            </div>
+            <div class="stat-value" id="kpi-active-projects" style="color: var(--teal);">9</div>
+            <div class="stat-meta">Aligned with national plans <span class="demo-badge">Demo</span></div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Target Citizens Reached</span>
+              <span class="stat-icon">👥</span>
+            </div>
+            <div class="stat-value" id="kpi-pop-reached">4.2M</div>
+            <div class="stat-meta">In prioritized cluster areas <span class="demo-badge">Demo</span></div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">AI Analysis Confidence</span>
+              <span class="stat-icon">🧠</span>
+            </div>
+            <div class="stat-value" id="kpi-confidence" style="color: var(--gold);">94.2%</div>
+            <div class="stat-meta">Multilingual Groq/NLP model <span class="demo-badge">Demo</span></div>
+          </div>
+        </div>
+
+        <!-- Geospatial Hotspot Map -->
+        <div class="card" style="margin-bottom: 28px;">
+          <div class="card-header">
+            <div>
+              <div class="card-title">🗺️ Geospatial Demand Hotspots & Clustered Feedback</div>
+              <div class="card-subtitle">Real-time geographic clusters mapped against population density and municipal vulnerability indices.</div>
+            </div>
+            <span class="demo-badge">Simulated Cartography</span>
+          </div>
+
+          <div class="map-wrapper">
+            <div id="hotspots-map"></div>
+            <div class="map-floating-overlay">
+              <div style="font-weight: 700; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Severity Classification</div>
+              <div class="map-legend-item"><span class="legend-color" style="background: #ef4444;"></span> Critical Priority Deficit</div>
+              <div class="map-legend-item"><span class="legend-color" style="background: #f97316;"></span> High Demand Corridor</div>
+              <div class="map-legend-item"><span class="legend-color" style="background: #f59e0b;"></span> Moderate Infrastructure Need</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="dashboard-grid-3-1">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📈 30-Day Citizen Demand Ingestion Velocity</div>
+              <span class="demo-badge">Demo</span>
+            </div>
+            <div style="height: 260px;">
+              <canvas id="chart-trend"></canvas>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🏷️ Category Distribution</div>
+              <span class="demo-badge">Demo</span>
+            </div>
+            <div style="height: 260px;">
+              <canvas id="chart-categories"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Infrastructure Coverage Indices -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">📊 National Infrastructure Coverage vs Benchmark</div>
+              <div class="card-subtitle">Aggregated from national registry baselines (water, power, transit, digital connectivity).</div>
+            </div>
+            <span class="demo-badge">Synthetic Baseline</span>
+          </div>
+          <div style="height: 280px;">
+            <canvas id="chart-infrastructure-radar"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================== -->
+      <!-- TAB 2: CITIZEN REQUESTS FEED             -->
+      <!-- ======================================== -->
+      <section class="view-section" id="view-requests">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <h2>Multilingual Citizen Voices Feed</h2>
+            <p>Raw voice transcripts, SMS inputs, and WhatsApp messages standardized into structured policy intelligence.</p>
+          </div>
+          <span class="demo-badge">Simulated Feed</span>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="feed-filter-bar">
+          <input type="text" id="search-requests" class="filter-input" placeholder="Search by locality, complaint, or keyword...">
+          <select id="filter-requests-category" class="filter-select">
+            <option value="all">All Sectors</option>
+            <option value="water">Water & Sanitation</option>
+            <option value="transport">Public Transit</option>
+            <option value="energy">Power & Energy</option>
+            <option value="roads">Roads & Bridges</option>
+            <option value="health">Clinics & Health</option>
+            <option value="digital">Digital & Logistics</option>
+          </select>
+          <button class="btn btn-primary btn-sm" onclick="switchTab('intake')">+ Submit New Request</button>
+        </div>
+
+        <!-- Requests Feed Container -->
+        <div id="requests-feed-container"></div>
+      </section>
+
+      <!-- ======================================== -->
+      <!-- TAB 3: DEMAND HOTSPOTS                   -->
+      <!-- ======================================== -->
+      <section class="view-section" id="view-hotspots">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <h2>Geographic Demand Hotspots</h2>
+            <p>Clustered concentrations of citizen requests requiring targeted municipal or federal capital intervention.</p>
+          </div>
+          <span class="demo-badge">Clustered AI Data</span>
+        </div>
+
+        <div id="hotspots-list-container"></div>
+      </section>
+
+      <!-- ======================================== -->
+      <!-- TAB 4: INFRASTRUCTURE GAPS MATRIX        -->
+      <!-- ======================================== -->
+      <section class="view-section" id="view-gaps">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <h2>Infrastructure Gap Analysis Matrix</h2>
+            <p>Synthesizing citizen demand density with national demographic vulnerability and existing infrastructure coverage.</p>
+          </div>
+          <span class="demo-badge">Deficit Analysis</span>
+        </div>
+
+        <div id="gaps-list-container"></div>
+      </section>
+
+      <!-- ======================================== -->
+      <!-- TAB 5: DEVELOPMENT RECOMMENDATIONS       -->
+      <!-- ======================================== -->
+      <section class="view-section" id="view-recommendations">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <h2>Policy Recommendations & Explainability Dossier</h2>
+            <p>Actionable capital project proposals surfaced by AI with confidence scoring and audit-ready explainability trails.</p>
+          </div>
+          <span class="demo-badge">Evidence-Backed Models</span>
+        </div>
+
+        <div id="recommendations-list-container"></div>
+      </section>
+
+      <!-- ======================================== -->
+      <!-- TAB 6: DPI IMPACT MONITORING             -->
+      <!-- ======================================== -->
+      <section class="view-section" id="view-impact">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <h2>DPI Impact & Project Lifecycle Tracking</h2>
+            <p>Measuring real-world outcomes before and after capital deployment across key socio-economic indices.</p>
+          </div>
+          <span class="demo-badge">Simulated Metrics</span>
+        </div>
+
+        <div id="impact-projects-container"></div>
+      </section>
+
+      <!-- ======================================== -->
+      <!-- TAB 7: DATA SOURCES & GOVERNANCE         -->
+      <!-- ======================================== -->
+      <section class="view-section" id="view-datasources">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <h2>Data Sources & Digital Public Good Architecture</h2>
+            <p>Transparent registry showing active synthetic demo connectors and future real government API integrations.</p>
+          </div>
+          <span class="demo-badge">Architecture Registry</span>
+        </div>
+
+        <div id="data-sources-container"></div>
+      </section>
+
+      <!-- ======================================== -->
+      <!-- TAB 8: CITIZEN INTAKE STUDIO             -->
+      <!-- ======================================== -->
+      <section class="view-section" id="view-intake">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <h2>Multilingual Citizen Voice & Text Intake Studio</h2>
+            <p>Simulate citizen inputs via toll-free voice IVRS, WhatsApp Business, SMS, or web forms in native BRICS languages.</p>
+          </div>
+          <span class="demo-badge">Interactive Sandbox</span>
+        </div>
+
+        <div class="studio-card">
+          <!-- Audio Recording Box -->
+          <div class="audio-recorder-box">
+            <button id="btn-record-audio" class="record-btn" title="Click to Record">🎙️</button>
+            <div id="record-status-label" style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 12px;">
+              Click microphone to record citizen voice via IVRS / Web Audio
+            </div>
+            <canvas id="audio-visualizer-canvas" class="visualizer-canvas"></canvas>
+          </div>
+
+          <!-- Quick Test Prompts in Native Languages -->
+          <div style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">
+            QUICK TEST IN NATIVE BRICS LANGUAGES:
+          </div>
+          <div id="quick-prompts-tray" class="quick-prompts-tray"></div>
+
+          <!-- Submission Form -->
+          <div class="form-group">
+            <label class="form-label" for="intake-text-input">Citizen Request Content (Voice Transcript or Message Text)</label>
+            <textarea id="intake-text-input" class="form-textarea" placeholder="Describe the infrastructure issue (e.g., broken water pipeline, bus feeder shortage, power cuts)..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="intake-location-input">Location / District / Ward</label>
+            <input type="text" id="intake-location-input" class="filter-input" style="width: 100%;" placeholder="e.g., Madurai District, Tamil Nadu">
+          </div>
+
+          <button id="btn-submit-request" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 1rem;">
+            Submit to Intelligence Pipeline
+          </button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+</div>
+
+<!-- ========================================== -->
+<!-- CLERK AUTHENTICATION GATE (SOVEREIGN ACCESS)-->
+<!-- ========================================== -->
+<div class="clerk-auth-gate" id="clerk-auth-gate">
+  <div class="clerk-auth-card">
+    <div class="clerk-lock-icon">🏛️</div>
+    <div class="clerk-auth-title">National Policymaker Platform</div>
+    <div class="clerk-auth-subtitle">
+      Restricted Ministerial Access • Official Government Login Required
+    </div>
+
+    <div style="margin: 20px 0;">
+      <a href="login.html" class="btn btn-primary" style="display: block; width: 100%; padding: 14px; font-size: 0.95rem; text-decoration: none; text-align: center; box-sizing: border-box;">
+        🔑 Sign In with Policymaker Credentials →
+      </a>
+    </div>
+
+    <div class="clerk-divider">OR INSTANT EVALUATOR SESSION</div>
+
+    <!-- 1-Click Fast Diplomatic Demo Access for Evaluators & Judges -->
+    <button id="btn-fast-demo-login" class="btn btn-secondary" style="width: 100%; padding: 12px; font-size: 0.92rem; border-color: rgba(249,115,22,0.4); color: #fed7aa;">
+      ⚡ 1-Click Evaluator Session (admin)
+    </button>
+    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">
+      Instant sovereign session for hackathon judges & government evaluators
+    </div>
+
+    <div style="margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border);">
+      <a href="index.html" style="font-size: 0.85rem; color: var(--brics-orange); font-weight: 600;">← Return to Public Citizen Portal (Clerk Auth)</a>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- MODAL: AI CLASSIFICATION RESULT           -->
+<!-- ========================================== -->
+<div class="modal-backdrop" id="modal-analysis-result">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <div style="font-weight: 700; font-size: 1.1rem;">AI Intelligence Pipeline Output</div>
+      <button class="btn-icon" onclick="document.getElementById('modal-analysis-result').classList.remove('active')">✕</button>
+    </div>
+    <div class="modal-body" id="analysis-result-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="document.getElementById('modal-analysis-result').classList.remove('active'); switchTab('requests');">
+        View in Citizen Feed →
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-settings">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <div style="font-weight: 700; font-size: 1.1rem;">🛡️ Sovereign Security & Services Status</div>
+      <button class="btn-icon" id="btn-close-settings">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom: 16px; background: var(--bg-input); padding: 14px; border-radius: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span style="font-weight: 700; color: #fff; font-size: 0.9rem;">🔐 Clerk Identity Management</span>
+          <span class="status-badge success">CONNECTED</span>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--text-secondary);">
+          Secured backend linking: Clerk Enterprise Identity (BRICS _01). Zero-Trust Role-Based Access Control enforced on all endpoints.
+        </div>
+      </div>
+
+      <div style="margin-bottom: 16px; background: var(--bg-input); padding: 14px; border-radius: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span style="font-weight: 700; color: #fff; font-size: 0.9rem;">⚡ Groq Neural Inference</span>
+          <span class="status-badge success">ACTIVE</span>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--text-secondary);">
+          Multi-lingual speech-to-text (Whisper Large v3) and reasoning (GPT-OSS-120b / Qwen-27b) running securely server-side.
+        </div>
+      </div>
+
+      <div style="background: var(--bg-input); padding: 14px; border-radius: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span style="font-weight: 700; color: #fff; font-size: 0.9rem;">🗺️ Cartography & Geospatial Engine</span>
+          <span class="status-badge success">ACTIVE</span>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--text-secondary);">
+          OpenStreetMap high-resolution public tiles. Zero commercial watermarks or external key constraints.
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="document.getElementById('modal-settings').classList.remove('active')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Core Scripts -->
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

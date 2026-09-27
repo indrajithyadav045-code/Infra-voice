@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>National Policymaker Login — InfraVoice BRICS</title>
+
+  <!-- Modern Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    :root {
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --primary-orange: #f97316;
+      --primary-teal: #0d9488;
+    }
+
+    body {
+      background-color: #060911;
+      background-image: 
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(249, 115, 22, 0.15), transparent 70%),
+        radial-gradient(ellipse 60% 40% at 85% 85%, rgba(13, 148, 136, 0.12), transparent 70%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #f8fafc;
+      font-family: var(--font-main);
+      margin: 0;
+    }
+
+    .login-nav {
+      padding: 20px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .login-main {
+      max-width: 460px;
+      width: 100%;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .login-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 38px 32px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 35px rgba(249, 115, 22, 0.15);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #f97316, #0d9488, #fbbf24);
+    }
+
+    .gov-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(13, 148, 136, 0.15);
+      color: #2dd4bf;
+      border: 1px solid rgba(13, 148, 136, 0.35);
+      padding: 4px 14px;
+      border-radius: 9999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .login-title {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .login-sub {
+      font-size: 0.92rem;
+      color: #94a3b8;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .login-form {
+      text-align: left;
+    }
+
+    .form-group-item {
+      margin-bottom: 18px;
+    }
+
+    .form-group-item label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .input-field-custom {
+      width: 100%;
+      background: rgba(8, 14, 26, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 13px 16px;
+      color: #f8fafc;
+      font-size: 0.95rem;
+      font-family: var(--font-main);
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+    }
+
+    .input-field-custom:focus {
+      outline: none;
+      border-color: #f97316;
+      box-shadow: 0 0 14px rgba(249, 115, 22, 0.3);
+    }
+
+    .demo-creds-chip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(249, 115, 22, 0.1);
+      border: 1px solid rgba(249, 115, 22, 0.25);
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 0.8rem;
+      color: #fed7aa;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .demo-creds-chip:hover {
+      background: rgba(249, 115, 22, 0.18);
+      border-color: rgba(249, 115, 22, 0.45);
+    }
+
+    .btn-submit-login {
+      width: 100%;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: var(--font-display);
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(249, 115, 22, 0.35);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-submit-login:hover {
+      background: linear-gradient(135deg, #ea580c, #c2410c);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(249, 115, 22, 0.5);
+    }
+
+    .error-alert-box {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      margin-bottom: 16px;
+      display: none;
+      text-align: left;
+    }
+
+    .citizen-redirect-callout {
+      margin-top: 24px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      font-size: 0.84rem;
+      color: #94a3b8;
+    }
+
+    .citizen-redirect-callout a {
+      color: #fb923c;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .citizen-redirect-callout a:hover {
+      text-decoration: underline;
+    }
+
+    .login-footer {
+      text-align: center;
+      padding: 24px;
+      color: #475569;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Nav -->
+  <nav class="login-nav">
+    <a href="index.html" class="brand-wrap">
+      <div style="font-size: 1.5rem;">🌐</div>
+      <div>Infra<span style="color: var(--primary-orange);">Voice</span></div>
+    </a>
+    <a href="index.html" style="color: #94a3b8; text-decoration: none; font-size: 0.88rem; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+      ← Back to Citizen Portal
+    </a>
+  </nav>
+
+  <!-- Login Card -->
+  <main class="login-main">
+    <div class="login-card">
+      <div class="gov-badge">
+        <span>🏛️ Diplomatic & Policymaker Gateway</span>
+      </div>
+
+      <h1 class="login-title">National Intelligence Access</h1>
+      <p class="login-sub">
+        Enter authorized government policymaker credentials to access geospatial demand heatmaps and capital dossiers.
+      </p>
+
+      <!-- Clean Demo Session Chip (No plaintext password exposed) -->
+      <div class="demo-creds-chip" id="btn-autofill-creds" title="Click to fill authorized policymaker session">
+        <div>
+          🏛️ <strong>Evaluator & Ministry Session:</strong> <br>
+          <span style="font-size: 0.82rem; color: #94a3b8;">Click to auto-authenticate as National Policymaker</span>
+        </div>
+        <span style="background: rgba(249, 115, 22, 0.25); color: #fed7aa; padding: 5px 10px; border-radius: 6px; font-weight: 700; font-size: 0.75rem;">1-CLICK FILL ↵</span>
+      </div>
+
+      <div id="login-error-alert" class="error-alert-box"></div>
+
+      <!-- Policymaker Form -->
+      <form class="login-form" id="policymaker-login-form">
+        <div class="form-group-item">
+          <label for="input-username">Policymaker Username</label>
+          <input type="text" id="input-username" class="input-field-custom" placeholder="Enter username" required autocomplete="username">
+        </div>
+
+        <div class="form-group-item">
+          <label for="input-password">Policymaker Password</label>
+          <input type="password" id="input-password" class="input-field-custom" placeholder="••••••••••••" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" id="btn-policymaker-submit" class="btn-submit-login">
+          <span>🏛️ Sign In to National Platform →</span>
+        </button>
+      </form>
+
+      <!-- Citizen Link -->
+      <div class="citizen-redirect-callout">
+        🗣️ <strong>Are you a normal public citizen?</strong><br>
+        Citizens use <strong>Clerk Authentication</strong> on the home portal to manage community grievances.<br>
+        <a href="index.html#submit-query">Go to the Public Citizen Voice Studio →</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="login-footer">
+    InfraVoice — Digital Public Good (DPG) • Sovereign Government Intelligence Gateway
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('policymaker-login-form');
+      const userInput = document.getElementById('input-username');
+      const passInput = document.getElementById('input-password');
+      const autofillBtn = document.getElementById('btn-autofill-creds');
+      const errorAlert = document.getElementById('login-error-alert');
+
+      // Autofill helper
+      if (autofillBtn) {
+        autofillBtn.addEventListener('click', () => {
+          userInput.value = 'admin';
+          passInput.value = 'admin@123';
+          errorAlert.style.display = 'none';
+        });
+      }
+
+      // Handle login submission
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const username = userInput.value.trim();
+          const password = passInput.value.trim();
+
+          if (username === 'admin' && password === 'admin@123') {
+            const policymakerUser = {
+              username: 'admin',
+              name: 'Chief Infrastructure Planner',
+              email: 'admin.policy@infravoice.gov',
+              role: 'National Policymaker',
+              initials: 'ADM',
+              authMethod: 'Official Policymaker Credentials'
+            };
+            sessionStorage.setItem('infravoice_auth_session', JSON.stringify(policymakerUser));
+            localStorage.setItem('infravoice_auth_session', JSON.stringify(policymakerUser));
+            window.location.href = 'dashboard.html';
+          } else {
+            errorAlert.style.display = 'block';
+            errorAlert.textContent = '❌ Invalid username or password. Please verify your credentials or use the 1-Click Ministry Fill.';
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
